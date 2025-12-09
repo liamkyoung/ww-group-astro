@@ -1,20 +1,36 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { getPostBySlug } from '../../lib/sanityQueries';
 import BlogPost from '../../layouts/BlogPost.astro';
+import { portableTextToHtml } from '../../lib/portableText';
+import { urlFor } from '../../lib/sanityImage';
+
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
-}
-type Props = CollectionEntry<'blog'>;
+  // Reuse getAllPosts to pre-generate all pages
+  const { getAllPosts } = await import('../../lib/sanityQueries');
+  const posts = await getAllPosts();
 
-const post = Astro.props;
-const { Content } = await render(post);
+  return posts.map((post) => ({
+    params: { slug: post.slug.current },
+  }));
+}
+
+const { slug } = Astro.params;
+const post = await getPostBySlug(slug as string);
+
+if (!post) {
+  throw new Error(`Post not found for slug: ${slug}`);
+}
+
+const html = portableTextToHtml(post.body);
+
+const heroImage = {src: urlFor(post.mainImage).url()}
 ---
 
-<BlogPost {...post.data}>
-	<Content />
+<article>
+	
+</article>
+
+<BlogPost title={post.title} pubDate={new Date(post.publishedAt)} description={post.description} imgSrc={urlFor(post.mainImage).url()}>
+	<div set:html={html} />
 </BlogPost>

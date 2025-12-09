@@ -1,0 +1,25 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Nav from '@/components/Header';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@/consts';
+
+const { title, description } = Astro.props;
+
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title || SITE_TITLE} description={description || SITE_DESCRIPTION} />
+	</head>
+
+	<body>
+		<Nav client:load />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>

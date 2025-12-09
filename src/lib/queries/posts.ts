@@ -1,36 +1,36 @@
 // src/lib/sanityQueries.ts
-import { client } from './sanityClient'
+import { sanityClient } from "../sanityClient";
 
 export type SanityPost = {
-  _id: string
-  title: string
-  slug: { current: string }
-  publishedAt: string
-  excerpt?: string
+  _id: string;
+  title: string;
+  slug: { current: string };
+  publishedAt: string;
+  excerpt?: string;
   mainImage?: {
     asset: {
-      _ref: string
-      _type: 'reference'
-    }
-  }
-}
+      _ref: string;
+      _type: "reference";
+    };
+  };
+};
 
 export type SanityPostBody = {
-  _id: string
-  title: string
-  slug: { current: string }
-  publishedAt: string
-  description?: string
-  excerpt?: string
+  _id: string;
+  title: string;
+  slug: { current: string };
+  publishedAt: string;
+  description?: string;
+  excerpt?: string;
   mainImage?: {
     asset: {
-      _ref: string
-      _type: 'reference'
-    }
-  }
-  body: any
+      _ref: string;
+      _type: "reference";
+    };
+  };
+  body: any;
   // add other fields from your Sanity schema as needed
-}
+};
 
 export async function getAllPosts(): Promise<SanityPost[]> {
   const query = `*[_type == "post"] | order(publishedAt desc){
@@ -40,12 +40,12 @@ export async function getAllPosts(): Promise<SanityPost[]> {
     publishedAt,
     excerpt,
     mainImage
-  }`
-  return client.fetch(query)
+  }`;
+  return sanityClient.fetch(query);
 }
 
 export async function getPostBySlug(
-  slug: string
+  slug: string,
 ): Promise<SanityPostBody | null> {
   const query = `*[_type == "post" && slug.current == $slug][0]{
     _id,
@@ -54,6 +54,6 @@ export async function getPostBySlug(
     publishedAt,
     body,
     mainImage
-  }`
-  return client.fetch(query, { slug })
+  }`;
+  return sanityClient.fetch(query, { slug });
 }

@@ -1,0 +1,50 @@
+---
+import CardInfo from "./CardInfo.astro";
+import { urlFor } from "@/lib/sanityImage";
+import type { CommunityResource } from "@/lib/queries/communityResources";
+
+interface Props {
+  className?: string;
+  doc?: CommunityResource;
+}
+
+const { className = "", doc } = Astro.props;
+
+const title = doc?.title ?? "";
+const image = doc?.image;
+const description = doc?.description ?? "";
+const address = doc?.address ?? "";
+
+// replace non-breaking spaces etc. with normal spaces
+const sanitizedDescription = description ? description.replace(/\s/g, " ") : "";
+
+// Only show street + city if present
+const shortenedAddressParts = address ? address.split(",") : [];
+const displayAddress =
+  shortenedAddressParts.length >= 2
+    ? `${shortenedAddressParts[0]}, ${shortenedAddressParts[1]}`
+    : address;
+---
+
+<div class={`w-64 md:w-96 lg:w-72 space-y-4 ${className}`}>
+  <div class="space-y-2">
+    <h5>{title}</h5>
+    <CardInfo address={displayAddress} />
+  </div>
+
+  {
+    image && (
+      <img
+        class="size-64 object-cover"
+        src={urlFor(image).url()}
+        alt={image.alt ?? title}
+      />
+    )
+  }
+
+  {
+    sanitizedDescription && (
+      <p class="border-l-4 border-wwRed pl-2">{sanitizedDescription}</p>
+    )
+  }
+</div>

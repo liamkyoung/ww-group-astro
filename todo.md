@@ -1,8 +1,8 @@
 [ ] Services
 [ ] Blog
 [ ] Listings
-[ ] Team - Phone Number - Office Number - Rank (order in list) - Specialization - job title
-[ ] Community Resources
+[ ] Team
+[x] Community Resources
 [ ] Involvement
 [ ] Teammates
 
@@ -11,4 +11,4 @@
 [ ] Events
 [ ] Projects / Deals
 
-[ ] Pages - Hardcode Most besides dynamic - Home - Services : Leasing, Sales, Acquisition, Consulting - Listings - Team - Deals/Projects - Community Involvement - News/Blog - Community Resources
+[ ] Pages - Hardcode Most besides dynamic - Home - Hero (HC) - About Us Stats (HC) - Team Banner (HC) - Featured Deals (Dynamic) - Services (HC) - Listings (Dynamic) - Companies (HC) - CTA (HC) - Footer - Services - Hero Section /w Cotnent and Image - Listings - List of Listings - /listing/:listing - hero - img gallery - information (rich text) - features - google map - agent - Team - Deals/Projects - Community Involvement - News/Blog - Community Resources - Contact

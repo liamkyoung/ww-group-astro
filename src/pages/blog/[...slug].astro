@@ -1,13 +1,12 @@
 ---
-import { getPostBySlug } from '../../lib/sanityQueries';
-import BlogPost from '../../layouts/BlogPost.astro';
-import { portableTextToHtml } from '../../lib/portableText';
-import { urlFor } from '../../lib/sanityImage';
-
+import { getPostBySlug } from "../../lib/queries/posts";
+import BlogPost from "../../layouts/BlogPost.astro";
+import { portableTextToHtml } from "../../lib/portableText";
+import { urlFor } from "../../lib/sanityImage";
 
 export async function getStaticPaths() {
   // Reuse getAllPosts to pre-generate all pages
-  const { getAllPosts } = await import('../../lib/sanityQueries');
+  const { getAllPosts } = await import("../../lib/queries/posts");
   const posts = await getAllPosts();
 
   return posts.map((post) => ({
@@ -24,13 +23,16 @@ if (!post) {
 
 const html = portableTextToHtml(post.body);
 
-const heroImage = {src: urlFor(post.mainImage).url()}
+const heroImage = { src: urlFor(post.mainImage).url() };
 ---
 
-<article>
-	
-</article>
+<article></article>
 
-<BlogPost title={post.title} pubDate={new Date(post.publishedAt)} description={post.description} imgSrc={urlFor(post.mainImage).url()}>
-	<div set:html={html} />
+<BlogPost
+  title={post.title}
+  pubDate={new Date(post.publishedAt)}
+  description={post.description}
+  imgSrc={urlFor(post.mainImage).url()}
+>
+  <div set:html={html} />
 </BlogPost>

@@ -1,9 +1,9 @@
-import rss from '@astrojs/rss'
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
-import { getAllPosts } from '../lib/sanityQueries'
+import rss from "@astrojs/rss";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import { getAllPosts } from "../lib/queries/posts";
 
 export async function GET(context) {
-  const posts = await getAllPosts()
+  const posts = await getAllPosts();
   return rss({
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
@@ -11,5 +11,5 @@ export async function GET(context) {
     items: posts.map((post) => ({
       link: `/blog/${post._id}/`,
     })),
-  })
+  });
 }

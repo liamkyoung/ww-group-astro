@@ -1,0 +1,189 @@
+---
+import CommunityResourceCard from "@/components/Cards/CommunityResourceCard.astro";
+import type { CommunityResource } from "@/lib/queries/communityResources";
+
+interface Props {
+  communityResources: CommunityResource[];
+  displayHeader?: "yes" | "no";
+}
+
+const { communityResources = [], displayHeader = "no" } = Astro.props;
+
+type Option = {
+  label: string;
+  shorthand: string;
+};
+
+const options: Option[] = [
+  { label: "All", shorthand: "a" },
+  { label: "Bars & Breweries", shorthand: "bb" },
+  { label: "Coffee", shorthand: "cof" },
+  { label: "Dining", shorthand: "din" },
+  { label: "Disaster Relief", shorthand: "dr" },
+  { label: "Entertainment", shorthand: "ent" },
+  { label: "Exercise", shorthand: "ex" },
+  { label: "Parks and Rec", shorthand: "pr" },
+  { label: "Realtor Resources", shorthand: "rr" },
+  { label: "Shopping", shorthand: "sh" },
+  { label: "Volunteering", shorthand: "v" },
+];
+
+// Don't mutate the original array
+const sortedResources = [...communityResources].sort((a, b) => {
+  const titleA = (a.title || "").toLowerCase();
+  const titleB = (b.title || "").toLowerCase();
+  return titleA.localeCompare(titleB);
+});
+---
+
+<div class="global-margin-x">
+  {displayHeader === "yes" && (
+    <h2 class="mb-16 lg:hidden block">Community Resources</h2>
+  )}
+
+  {sortedResources.length > 0 ? (
+    <>
+      <!-- Filters -->
+      <div>
+        <!-- Mobile select -->
+        <div class="md:hidden">
+          <label for="resource-tabs" class="sr-only">
+            Select a category
+          </label>
+          <select
+            id="resource-tabs"
+            name="resource-tabs"
+            class="text-black block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-wwRed focus:outline-none focus:ring-wwRed sm:text-sm"
+          >
+            {options.map((o) => (
+              <option
+                value={o.shorthand}
+                data-label={o.label}
+              >
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Desktop tabs -->
+        <div class="hidden md:block">
+          <div class="border-b border-gray-200">
+            <nav
+              class="-mb-px flex space-x-8 justify-start"
+              aria-label="Tabs"
+            >
+              {options.map((o, idx) => (
+                <button
+                  type="button"
+                  class={
+                    idx === 0
+                      ? "text-wwRed whitespace-nowrap border-b-2 border-wwRed px-1 py-4 text-sm font-medium"
+                      : "text-gray-500 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-sm font-medium hover:border-gray-300 hover:text-gray-700"
+                  }
+                  data-shorthand={o.shorthand}
+                  data-label={o.label}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gallery -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-16 my-24 lg:place-items-start place-items-center resource-grid">
+        {sortedResources.map((r) => {
+          // Adjust depending on how categories are modeled in Sanity
+          let categoryTitle = "";
+          const cat: any = r.categories;
+          if (cat && typeof cat === "object" && "title" in cat) {
+            categoryTitle = cat.title || "";
+          }
+
+          return (
+            <div
+              class="resource-card"
+              data-category={categoryTitle}
+            >
+              <CommunityResourceCard doc={r} />
+            </div>
+          );
+        })}
+      </div>
+    </>
+  ) : (
+    <p class="text-center font-bold flex items-center justify-center my-24">
+      There are no community resources available.
+    </p>
+  )}
+</div>
+
+<script type="module">
+  const mobileSelect = document.querySelector("#resource-tabs");
+  const desktopButtons = Array.from(
+    document.querySelectorAll("button[data-shorthand]")
+  );
+  const cards = Array.from(
+    document.querySelectorAll(".resource-card")
+  );
+
+  function applyFilter(label) {
+    const trimmedLabel = (label || "").trim();
+    cards.forEach((card) => {
+      const category = card.dataset.category || "";
+      const show =
+        !trimmedLabel ||
+        trimmedLabel === "All" ||
+        category.includes(trimmedLabel);
+      card.style.display = show ? "" : "none";
+    });
+  }
+
+  function setActive(shorthand) {
+    desktopButtons.forEach((btn) => {
+      const isSelected = btn.dataset.shorthand === shorthand;
+      btn.classList.toggle("text-wwRed", isSelected);
+      btn.classList.toggle("border-wwRed", isSelected);
+      btn.classList.toggle("text-gray-500", !isSelected);
+      btn.classList.toggle("border-transparent", !isSelected);
+    });
+  }
+
+  // Initial state: "All"
+  const firstButton = desktopButtons[0];
+  const defaultLabel = firstButton?.dataset.label || "All";
+  const defaultShorthand = firstButton?.dataset.shorthand || "a";
+
+  applyFilter(defaultLabel);
+  setActive(defaultShorthand);
+  if (mobileSelect) {
+    mobileSelect.value = defaultShorthand;
+  }
+
+  // Desktop tab click handler
+  desktopButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const label = btn.dataset.label;
+      const shorthand = btn.dataset.shorthand;
+      applyFilter(label);
+      setActive(shorthand);
+      if (mobileSelect) {
+        mobileSelect.value = shorthand;
+      }
+    });
+  });
+
+  // Mobile select change handler
+  if (mobileSelect) {
+    mobileSelect.addEventListener("change", (event) => {
+      const select = event.target;
+      const selectedShorthand = select.value;
+      const selectedOption = select.selectedOptions[0];
+      const label = selectedOption?.dataset.label;
+      applyFilter(label);
+      setActive(selectedShorthand);
+    });
+  }
+</script>

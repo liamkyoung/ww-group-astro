@@ -1,5 +1,5 @@
-import KWLogo from '../../assets/branding/kw_logo.png'
-import Logo from '../../assets/branding/logo.svg'
+import KWLogo from "../../assets/branding/kw_logo.png";
+import Logo from "../../assets/branding/logo.svg";
 
 import {
   Sheet,
@@ -9,10 +9,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet'
-import { InternalLinks } from '@/globals/navigation'
-import { ContactLink } from '@/globals/navigation/contact/contact'
-import { Image } from 'astro:assets'
+} from "@/components/ui/sheet";
+import { InternalLinks } from "@/globals/navigation";
+import { ContactLink } from "@/globals/navigation/contact/contact";
 
 function MobileHeader({}) {
   return (
@@ -39,7 +38,7 @@ function MobileHeader({}) {
             </svg>
           </div>
         </SheetTrigger>
-        <SheetContent side={'left'}>
+        <SheetContent side={"left"}>
           <SheetHeader>
             <SheetTitle>
               <a href="/" className="flex items-center gap-6">
@@ -82,7 +81,7 @@ function MobileHeader({}) {
         </SheetContent>
       </Sheet>
     </nav>
-  )
+  );
 }
 
-export default MobileHeader
+export default MobileHeader;

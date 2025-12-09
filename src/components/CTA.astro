@@ -1,0 +1,29 @@
+---
+import { ContactLink } from "@/globals/navigation/contact/contact";
+import AgentImg from "@/assets/images/amber_cta.png";
+---
+
+<div class="bg-wwRed py-16">
+  <div class="global-margin-x relative">
+    <div class="relative max-w-7xl mx-auto">
+      <div
+        class="mx-auto lg:mx-0 md:max-w-none w-full md:w-1/2 xl:w-3/4 space-y-8 text-center lg:text-left"
+      >
+        <h2 class="text-white">
+          <span class="text-wwYellow">Let&apos;s get in contact!</span>
+          <br /> Let us know how we can help you.
+        </h2>
+        <div>
+          <a class="btn-secondary" href={ContactLink.relLink}>CONTACT US</a>
+        </div>
+      </div>
+      <div class="hidden lg:block absolute -bottom-16 right-0 z-50">
+        <img
+          src={AgentImg.src}
+          alt="Amber Agent CTA"
+          class="h-128 object-contain max-w-min"
+        />
+      </div>
+    </div>
+  </div>
+</div>

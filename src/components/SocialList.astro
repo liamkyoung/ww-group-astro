@@ -1,0 +1,107 @@
+---
+// SocialList.astro
+
+import SocialIcon from "@/components/SocialIcon.astro";
+import { DefaultSocials } from "@/globals/general";
+
+type ColorScheme = "default" | "red" | "yellow";
+
+type SocialMediaInfo = {
+  profileLink: string;
+  username?: string;
+};
+
+interface Props {
+  colorScheme?: ColorScheme;
+  email?: string;
+  phoneNumber?: string;
+  officeNumber?: string;
+  instagram?: SocialMediaInfo | null;
+  facebook?: SocialMediaInfo | null;
+  linkedin?: SocialMediaInfo | null;
+}
+
+const {
+  email = DefaultSocials.email,
+  phoneNumber = DefaultSocials.phoneNumber,
+  officeNumber = DefaultSocials.phoneNumber,
+  instagram = DefaultSocials.instagram,
+  facebook = DefaultSocials.facebook,
+  linkedin = DefaultSocials.linkedin,
+  colorScheme = "default",
+} = Astro.props;
+---
+
+<div class="flex flex-col items-start gap-8 mx-auto">
+  {
+    email && (
+      <SocialIcon
+        type="email"
+        href={`mailto:${email}`}
+        label={email}
+        showLabel={true}
+        colorScheme={colorScheme}
+      />
+    )
+  }
+
+  {
+    phoneNumber && (
+      <SocialIcon
+        type="phone"
+        href={`tel:${phoneNumber}`}
+        label={phoneNumber}
+        showLabel={true}
+        colorScheme={colorScheme}
+      />
+    )
+  }
+
+  {
+    officeNumber && (
+      <SocialIcon
+        type="phone"
+        href={`tel:${officeNumber}`}
+        label={officeNumber}
+        showLabel={true}
+        colorScheme={colorScheme}
+      />
+    )
+  }
+
+  {
+    instagram && instagram.profileLink && (
+      <SocialIcon
+        type="instagram"
+        href={instagram.profileLink}
+        label={instagram.username}
+        showLabel={!!instagram.username}
+        colorScheme={colorScheme}
+      />
+    )
+  }
+
+  {
+    facebook && facebook.profileLink && (
+      <SocialIcon
+        type="facebook"
+        href={facebook.profileLink}
+        label={facebook.username}
+        showLabel={!!facebook.username}
+        colorScheme={colorScheme}
+      />
+    )
+  }
+
+  {
+    linkedin && linkedin.profileLink && (
+      <SocialIcon
+        type="linkedin"
+        href={linkedin.profileLink}
+        label={linkedin.username}
+        showLabel={!!linkedin.username}
+        colorScheme={colorScheme}
+      />
+    )
+  }
+</div>

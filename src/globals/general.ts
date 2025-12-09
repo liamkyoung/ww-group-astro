@@ -4,17 +4,6 @@ export const DefaultSocials: Socials = {
   phoneNumber: "(727) 777-4808",
   email: "contact@wwgre.com",
   address: "360 Central Ave, St. Petersburg, FL 33701",
-  // linkedin: {
-  //   platformName: 'linkedin',
-  //   username: 'liamkyoung',
-  //   profileLink: 'https://www.linkedin.com/in/liamkyoung',
-  // },
-  // twitter: {
-  //   platformName: 'twitter',
-  //   username: 'liamkyoung',
-  //   profileLink: 'https://www.x.com/liamkyoung',
-  // },
-
   instagram: {
     platformName: "instagram",
     username: "wittnerwollmangroup",

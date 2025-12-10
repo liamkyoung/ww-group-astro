@@ -1,0 +1,33 @@
+---
+import ServiceCard, {
+  type Service,
+} from "@/components/Cards/ServiceCard.astro";
+import { ServiceLinks } from "@/globals/navigation/services/services";
+
+interface Props {
+  services: Service[];
+  displayHeader?: "yes" | "no";
+}
+
+const { services = [], displayHeader = "yes" } = Astro.props;
+---
+
+<div class="global-margin-x space-y-24 my-40">
+  {
+    displayHeader === "yes" && (
+      <div class="flex md:justify-between justify-center items-center">
+        <h2 class="md:text-left text-center">Our Services</h2>
+      </div>
+    )
+  }
+
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 gap-16 lg:justify-items-start justify-items-center"
+  >
+    {services.map((service) => <ServiceCard service={service} />)}
+  </div>
+
+  <div class="md:hidden flex justify-center">
+    <a class="btn-primary" href={ServiceLinks.relLink}> LEARN MORE </a>
+  </div>
+</div>

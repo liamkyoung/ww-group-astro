@@ -1,0 +1,157 @@
+---
+export interface ServiceHero {
+  imageUrl?: string;
+  alt?: string;
+}
+
+export interface Service {
+  id?: string | number;
+  title?: string;
+  shortDescription?: string;
+  slug?: string;
+  image?: ServiceHero;
+}
+
+interface Props {
+  service: Service;
+  className?: string;
+}
+
+const { service, className = "" } = Astro.props;
+const { title, shortDescription, slug, image } = service ?? {};
+
+const href = slug ? `/services/${slug}` : "#";
+const sanitizedDescription = shortDescription?.replace(/\s/g, " ");
+const imageUrl = image?.imageUrl;
+const imageAlt = image?.alt || title || "Service image";
+
+const iconType = title?.toLowerCase();
+---
+
+<a href={href} class={`w-full h-full block ${className}`}>
+  <div class="flex gap-2 relative group">
+    {/* Overlay content */}
+    <div
+      class="flex items-center justify-center sm:block w-full h-full lg:h-auto lg:w-64
+             border-b-4 border-wwSecondary border-opacity-50 bg-gray-50/75
+             absolute top-0 left-0 px-4 lg:px-8 py-4 z-10"
+    >
+      <div>
+        <div
+          class="flex flex-col items-center sm:block sm:items-start max-w-min"
+        >
+          <div class="bg-wwRed p-4 mb-4 rounded-full inline-flex">
+            {
+              iconType === "leasing" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="size-8 text-gray-50"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M15.75 1.5a6.75 6.75 0 0 0-6.651 7.906c.067.39-.032.717-.221.906l-6.5 6.499a3 3 0 0 0-.878 2.121v2.818c0 .414.336.75.75.75H6a.75.75 0 0 0 .75-.75v-1.5h1.5A.75.75 0 0 0 9 19.5V18h1.5a.75.75 0 0 0 .53-.22l2.658-2.658c.19-.189.517-.288.906-.22A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              )
+            }
+
+            {
+              iconType === "sales" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="size-8 text-gray-50"
+                >
+                  <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 0 0-1.032-.211 50.89 50.89 0 0 0-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 0 0 2.433 3.984L7.28 21.53A.75.75 0 0 1 6 21v-4.03a48.527 48.527 0 0 1-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979Z" />
+                  <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 0 0 1.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0 0 15.75 7.5Z" />
+                </svg>
+              )
+            }
+
+            {
+              iconType === "acquisition" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="size-8 text-gray-50"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5H15v-18a.75.75 0 0 0 0-1.5H3ZM6.75 19.5v-2.25a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75ZM6 6.75A.75.75 0 0 1 6.75 6h.75a.75.75 0 0 1 0 1.5h-.75A.75.75 0 0 1 6 6.75ZM6.75 9a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM6 12.75a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 6a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75Zm-.75 3.75A.75.75 0 0 1 10.5 9h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 12a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM16.5 6.75v15h5.25a.75.75 0 0 0 0-1.5H21v-12a.75.75 0 0 0 0-1.5h-4.5Zm1.5 4.5a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm.75 2.25a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75v-.008a.75.75 0 0 0-.75-.75h-.008ZM18 17.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              )
+            }
+
+            {
+              iconType === "consulting" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="size-8 text-gray-50"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2.25 2.25a.75.75 0 0 0 0 1.5H3v10.5a3 3 0 0 0 3 3h1.21l-1.172 3.513a.75.75 0 0 0 1.424.474l.329-.987h8.418l.33.987a.75.75 0 0 0 1.422-.474l-1.17-3.513H18a3 3 0 0 0 3-3V3.75h.75a.75.75 0 0 0 0-1.5H2.25Zm6.04 16.5.5-1.5h6.42l.5 1.5H8.29Zm7.46-12a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 1.5 0v-6Zm-3 2.25a.75.75 0 0 0-1.5 0v3.75a.75.75 0 0 0 1.5 0V9Zm-3 2.25a.75.75 0 0 0-1.5 0v1.5a.75.75 0 0 0 1.5 0v-1.5Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              )
+            }
+          </div>
+
+          <div class="flex items-center gap-6 mb-2">
+            <h5 class="font-bold">{title}</h5>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="hidden sm:block size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"></path>
+            </svg>
+          </div>
+
+          {
+            sanitizedDescription && (
+              <p class="hidden sm:block text-sm text-wwBlack">
+                {sanitizedDescription}
+              </p>
+            )
+          }
+        </div>
+      </div>
+    </div>
+
+    {/* Hover wash */}
+    <div
+      class="transition-opacity opacity-0 group-hover:opacity-20
+             bg-gray-50 w-full h-full absolute top-0 left-0"
+    >
+    </div>
+
+    {/* Background image */}
+    {
+      imageUrl && (
+        <img
+          src={imageUrl}
+          alt={imageAlt}
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+      )
+    }
+  </div>
+</a>

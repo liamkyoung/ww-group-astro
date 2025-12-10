@@ -1,8 +1,5 @@
 ---
-import {
-  ALL_COMMUNITY_RESOURCES_QUERY,
-  type CommunityResource,
-} from "@/lib/queries/communityResources";
+import { ALL_COMMUNITY_RESOURCES_QUERY } from "@/lib/queries/communityResources";
 import { sanityClient } from "@/lib/sanityClient";
 import CommunityResourceGallery from "@/components/Grid/CommunityResourceGallery.astro";
 import Default from "@/layouts/Default.astro";
@@ -15,7 +12,7 @@ const resources = await sanityClient.fetch(ALL_COMMUNITY_RESOURCES_QUERY);
 <Default>
   <DefaultHero
     header={"Community Resources"}
-    body={"dasdasdsa"}
+    body={""}
     imageSrc={HeroImg.src}
   />
   <CommunityResourceGallery communityResources={resources} />

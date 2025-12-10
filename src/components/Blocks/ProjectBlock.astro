@@ -1,0 +1,205 @@
+---
+import ProjectStat from "@/components/ProjectStat.astro"; // or wherever you put it
+
+// Simple link model you can map from your CMSLink shape
+interface ProjectLink {
+  href: string;
+  label: string;
+  appearance?: "default" | "primary" | "secondary";
+}
+
+interface FactStat {
+  factStat: string;
+  factDescription: string;
+  id?: string | null;
+}
+
+type SubheadingType = "location" | "text" | "none";
+
+type ColorScheme = "default" | "red";
+
+interface Props {
+  id?: string;
+  title: string;
+  description: string;
+
+  subheading?: string;
+  subheadingType?: SubheadingType;
+
+  // Replaces Media: just a URL
+  imageSrc: string;
+  imageAlt?: string;
+
+  // "left" = image left on desktop, "right" = image right (your old position logic)
+  imagePosition?: "left" | "right";
+
+  // Background / color scheme
+  colorScheme?: ColorScheme;
+
+  // Optional stats below title
+  facts?: FactStat[];
+
+  // Optional CTAs
+  links?: ProjectLink[];
+}
+
+const {
+  id,
+  title,
+  description,
+  subheading,
+  subheadingType = "none",
+  imageSrc,
+  imageAlt = title,
+  imagePosition = "right",
+  colorScheme = "default",
+  facts = [],
+  links = [],
+} = Astro.props as Props;
+
+// Color system based on your old ColorScheme
+let bgColorClass = "bg-gray-50";
+let textColorClass = "text-wwBlack";
+let buttonClass = "btn-primary";
+let emphasisColorClass = "text-wwRed";
+
+if (colorScheme === "red") {
+  bgColorClass = "bg-wwRed";
+  textColorClass = "text-white";
+  buttonClass = "btn-secondary";
+  emphasisColorClass = "text-wwYellow";
+}
+
+const hasFacts = facts && facts.length > 0;
+const hasLinks = links && links.length > 0;
+const showLocationIcon = subheading && subheadingType === "location";
+const showTextSubheading = subheading && subheadingType === "text";
+---
+
+<div id={id} class={`grid lg:grid-cols-2 ${bgColorClass} overflow-x-hidden`}>
+  <!-- IMAGE LEFT ON DESKTOP -->
+  {
+    imagePosition === "left" && (
+      <div>
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          class="sm:w-full max-h-96 lg:max-h-none lg:h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+
+  <!-- TEXT COLUMN -->
+  <div
+    class={imagePosition === "left"
+      ? "p-8 ml-8 lg:mr-8 my-auto relative 2xl:ml-32 2xl:mr-16"
+      : "p-8 ml-8 2xl:ml-16 2xl:mr-32 my-auto relative"}
+  >
+    <div class="relative md:py-10 lg:pt-8 lg:pb-4">
+      <h2 class={`${textColorClass} text-left text-4xl lg:text-5xl`}>
+        {title}
+      </h2>
+
+      <div class="lg:inline-flex flex gap-2 mt-2">
+        {
+          showLocationIcon && (
+            <>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class={`size-6 ${emphasisColorClass}`}
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <p class={emphasisColorClass}>{subheading}</p>
+            </>
+          )
+        }
+
+        {showTextSubheading && <p class={emphasisColorClass}>{subheading}</p>}
+      </div>
+    </div>
+
+    <!-- Facts (desktop, 2xl and up) -->
+    {
+      hasFacts && (
+        <div class={`hidden 2xl:flex gap-4 ${bgColorClass} p-4`}>
+          {facts.map((f, i) => (
+            <ProjectStat
+              colorScheme={colorScheme}
+              stat={f.factStat}
+              description={f.factDescription}
+            />
+          ))}
+        </div>
+      )
+    }
+
+    <!-- Main description -->
+    <p
+      class={`pt-8 md:pt-4 ${
+        hasFacts ? "mb-10 2xl:mt-8" : ""
+      } ${textColorClass} text-left`}
+    >
+      {description}
+    </p>
+
+    <!-- Facts (mobile / tablet) -->
+    {
+      hasFacts && (
+        <div class="2xl:hidden flex flex-row flex-wrap lg:justify-start gap-8 p-4">
+          {facts.map((f) => (
+            <ProjectStat
+              colorScheme={colorScheme}
+              stat={f.factStat}
+              description={f.factDescription}
+            />
+          ))}
+        </div>
+      )
+    }
+
+    <!-- CTAs -->
+    {
+      hasLinks && (
+        <div class="flex flex-col lg:justify-start sm:flex-row sm:items-center gap-4 py-8">
+          {links.map((l, i) => {
+            // Button style from appearance
+            const appearance = l.appearance ?? "primary";
+            const baseClass =
+              appearance === "secondary"
+                ? "btn-secondary whitespace-nowrap max-w-min"
+                : buttonClass + " whitespace-nowrap max-w-min";
+
+            return (
+              <a href={l.href} class={baseClass}>
+                {l.label}
+              </a>
+            );
+          })}
+        </div>
+      )
+    }
+  </div>
+
+  <!-- IMAGE RIGHT ON DESKTOP -->
+  {
+    imagePosition === "right" && (
+      <div>
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          class="sm:w-full max-h-96 lg:max-h-none lg:h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+    )
+  }
+</div>

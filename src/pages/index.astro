@@ -1,9 +1,96 @@
 ---
 import Default from "@/layouts/Default.astro";
 import CTA from "@/components/CTA.astro";
+import FullscreenHero from "@/components/Hero/FullscreenHero.astro";
+
+import StatBlock, { type FactStat } from "@/components/Blocks/StatBlock.astro";
+import ProjectBlock from "@/components/Blocks/ProjectBlock.astro";
+import CompanyScroll from "@/components/Blocks/Company/CompanyScroll";
+import ServiceGallery from "@/components/Blocks/ServiceBlock.astro";
+import type { Service } from "@/components/Cards/ServiceCard.astro";
+
+const facts: FactStat[] = [
+  { factStat: "150+", factDescription: "Transactions closed" },
+  { factStat: "98%", factDescription: "Client satisfaction rate" },
+  { factStat: "12", factDescription: "Years in Tampa Bay" },
+  { factStat: "24/7", factDescription: "Support for our clients" },
+];
+
+//   id?: string | number;
+//   title?: string;
+//   shortDescription?: string;
+//   slug?: string;
+//   image?: ServiceImg;
+
+const services: Service[] = [
+  {
+    title: "Leasing",
+    slug: "leasing",
+    image: {
+      imageUrl: "src/assets/services/leasing-service-hero.webp",
+      alt: "Leasing Service",
+    },
+  },
+  {
+    title: "Consulting",
+    slug: "consulting",
+    image: {
+      imageUrl: "src/assets/services/consulting-service-hero.webp",
+      alt: "Consulting Service",
+    },
+  },
+  {
+    title: "Acquisition",
+    slug: "acquisition",
+    image: {
+      imageUrl: "src/assets/services/acquisition-service-hero.webp",
+      alt: "Acquisition Service",
+    },
+  },
+  {
+    title: "Sales",
+    slug: "sales",
+    image: {
+      imageUrl: "src/assets/services/sales-service-hero.webp",
+      alt: "Sales Service",
+    },
+  },
+];
 ---
 
 <Default>
-  <h1 class="">🧑‍🚀 Hello, Astronaut!</h1>
+  <FullscreenHero
+    headerText="WITTNER WOLLMAN GROUP: TRANSFORMING THE FUTURE OF ST. PETE & TAMPA BAY"
+    bodyText="Our team of stellar commercial and residential agents have a talent for envisioning the future of our town. Partner with us to make your mark."
+    videoUrl="https://ww-group.nyc3.cdn.digitaloceanspaces.com/website_vid.mp4"
+    backupImageUrl="src/assets/images/reflection-eagle-pov.webp"
+    centeredText={false}
+    gradient="black"
+    links={[
+      { href: "/team", label: "MEET THE TEAM", appearance: "primary" },
+      {
+        href: "/listings",
+        label: "VIEW LISTINGS",
+        appearance: "secondary",
+      },
+    ]}
+  />
+
+  <StatBlock id="stats" title="By the Numbers" facts={facts} />
+  <ProjectBlock
+    title="SHAPING THE URBAN LANDSCAPE & COMMUNITY"
+    description="Our team has exceptional talent and experience in commercial real estate, development services, and luxury residential real estate."
+    imageSrc="src/assets/images/team-portrait-img.webp"
+    imageAlt={"team image"}
+    imagePosition={"right"}
+    colorScheme={"red"}
+    links={[{ href: "/team", label: "MEET THE TEAM", appearance: "secondary" }]}
+  />
+
+  <ServiceGallery services={services} displayHeader="yes" />
+  <CompanyScroll client:load />
+
+  <!-- Featured Projects -->
+  <!-- Current Listings -->
   <CTA />
 </Default>

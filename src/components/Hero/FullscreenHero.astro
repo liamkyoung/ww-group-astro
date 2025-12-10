@@ -1,0 +1,142 @@
+---
+interface HeroLink {
+  href: string;
+  label: string;
+  appearance?: "primary" | "secondary"; // defaults to primary
+}
+
+interface Props {
+  headerText: string;
+  bodyText?: string; // plain string instead of RichText
+  links?: HeroLink[];
+
+  // Media
+  videoUrl?: string; // main hero background (desktop)
+  backupImageUrl?: string; // backup image for mobile / when no video
+
+  centeredText?: boolean;
+  gradient?: "none" | "red" | "black";
+}
+
+const {
+  headerText,
+  bodyText,
+  links = [],
+  videoUrl,
+  backupImageUrl,
+  centeredText = false,
+  gradient = "none",
+} = Astro.props as Props;
+
+function getGradientColor(g: string): string {
+  if (g === "red") return "to-wwRed";
+  if (g === "black") return "to-wwBlack";
+  return "";
+}
+
+const gradientColor = getGradientColor(gradient);
+---
+
+<div class="relative">
+  <div class="relative group">
+    <!-- Text + CTA overlay -->
+    <div
+      class={`absolute z-20 flex flex-col h-full justify-center md:space-y-16 space-y-4 global-margin-x ` +
+        (!centeredText ? "lg:w-3/5" : "")}
+    >
+      <div
+        class={`space-y-8 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity ` +
+          (!centeredText ? "lg:text-left" : "text-center lg:text-center")}
+      >
+        <h1
+          class="md:font-normal text-white text-3xl sm:text-3xl font-semibold md:text-5xl lg:text-6xl"
+        >
+          {headerText}
+        </h1>
+
+        {
+          bodyText && (
+            <div class="overflow-y-scroll max-h-64 sm:max-h-96 no-scrollbar">
+              <p
+                class={`md:text-lg font-medium text-sm text-white ${!centeredText ? "lg:w-full" : ""}`}
+              >
+                {bodyText}
+              </p>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Buttons -->
+      <div
+        class="flex gap-4 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity"
+      >
+        {
+          links.map((link) => {
+            const appearance = link.appearance ?? "primary";
+            const baseClass =
+              appearance === "secondary" ? "btn-secondary" : "btn-primary";
+
+            return (
+              <a href={link.href} class={baseClass}>
+                {link.label}
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+
+    <!-- Black overlay -->
+    <div
+      class="bg-wwBlack absolute inset-0 z-10 opacity-90 md:opacity-0 group-hover:opacity-90 transition-opacity pointer-events-none"
+    >
+    </div>
+
+    <!-- Desktop media: video or image -->
+    {
+      videoUrl ? (
+        <video
+          class="sm:w-full sm:h-screen lg:h-auto object-cover hidden sm:block"
+          src={videoUrl}
+          autoplay
+          muted
+          loop
+          playsinline
+        />
+      ) : backupImageUrl ? (
+        <img
+          src={backupImageUrl}
+          alt={headerText}
+          class="sm:w-full sm:h-screen lg:h-auto object-cover hidden sm:block"
+          loading="lazy"
+        />
+      ) : (
+        <div class="hidden sm:block sm:w-full sm:h-screen lg:h-auto bg-wwBlack" />
+      )
+    }
+
+    <!-- Mobile: always show backup image / fallback -->
+    {
+      backupImageUrl ? (
+        <img
+          src={backupImageUrl}
+          alt={headerText}
+          class="w-full h-96 object-cover sm:hidden block"
+          loading="lazy"
+        />
+      ) : (
+        <div class="w-full h-96 bg-wwBlack sm:hidden block" />
+      )
+    }
+  </div>
+
+  <!-- Bottom gradient -->
+  {
+    gradientColor && (
+      <div
+        class={`w-full bg-gradient-to-b from-wwBlack/0 ${gradientColor} pointer-events-none h-24 bottom-0 z-20 absolute`}
+      />
+    )
+  }
+</div>

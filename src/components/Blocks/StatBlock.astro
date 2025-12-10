@@ -1,0 +1,81 @@
+---
+import Stat from "@/components/Stat.astro";
+import BGImage from "@/assets/images/bg_backdrop.png"; // adjust path if needed
+
+export type FactStat = {
+  factStat: string;
+  factDescription: string;
+  id?: string | null;
+};
+
+interface Props {
+  title: string;
+  description?: string;
+  facts?: FactStat[];
+
+  // Background image URL (optional). If not provided, we use BGImage.
+  bgImageUrl?: string;
+  id?: string;
+}
+
+const { title, description, facts = [], bgImageUrl, id } = Astro.props as Props;
+
+const bgColors = ["bg-wwRed", "bg-wwBlack", "bg-wwLogoPink", "bg-wwLogoRed"];
+---
+
+<div class="relative" id={id}>
+  <div class="absolute z-10 w-full xl:h-auto mt-16">
+    <div class="global-margin-x py-0 lg:py-16">
+      <div
+        class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-16"
+      >
+        <h2 class="flex-1">{title}</h2>
+        {
+          description && (
+            <p class="text-center xl:text-right max-w-3xl">{description}</p>
+          )
+        }
+      </div>
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-4 global-space-x global-space-y"
+      >
+        {
+          facts.map((f, i) => {
+            const bgIndex = i % bgColors.length;
+            const bgColor = bgColors[bgIndex];
+
+            return (
+              <div class="transition-transform duration-300 ease-out opacity-100 md:hover:-translate-y-1">
+                <Stat
+                  bgColor={bgColor}
+                  title={f.factStat}
+                  descriptor={f.factDescription}
+                />
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+
+  {/* Background image layer */}
+  {
+    bgImageUrl ? (
+      <img
+        src={bgImageUrl}
+        alt="stats-bg"
+        class="w-full min-h-[48rem] xl:h-auto opacity-20 object-cover"
+        loading="lazy"
+      />
+    ) : (
+      <img
+        src={BGImage.src}
+        alt="stats-bg"
+        class="w-full min-h-[48rem] xl:h-auto opacity-20 object-cover"
+        loading="lazy"
+      />
+    )
+  }
+</div>

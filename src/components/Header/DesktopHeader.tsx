@@ -1,6 +1,6 @@
-import { Image } from 'astro:assets'
-import KWLogo from '../../assets/branding/kw_logo.png'
-import Logo from '../../assets/branding/logo.svg'
+import { Image } from "astro:assets";
+import KWLogo from "../../assets/branding/kw_logo.png";
+import Logo from "../../assets/branding/logo.svg";
 
 import {
   DropdownMenu,
@@ -8,9 +8,9 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { InternalLinks } from '@/globals/navigation'
-import { ContactLink } from '@/globals/navigation/contact/contact'
+} from "@/components/ui/dropdown-menu";
+import { InternalLinks } from "@/globals/navigation";
+import { ContactLink } from "@/globals/navigation/contact/contact";
 
 function DesktopHeader({}) {
   return (
@@ -26,15 +26,15 @@ function DesktopHeader({}) {
             return (
               <DropdownMenu key={navGroup.title}>
                 <DropdownMenuTrigger asChild>
-                  <p className="hover:text-gray-500 cursor-pointer">
+                  <p className="hover:text-gray-500 cursor-pointer bg-white">
                     {navGroup.title}
                   </p>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
+                <DropdownMenuContent className="w-56 bg-white ">
                   <DropdownMenuGroup>
                     {navGroup.subNavigation.map((subNav) => (
                       <a href={subNav.relLink} key={subNav.title}>
-                        <DropdownMenuItem className="hover:cursor-pointer">
+                        <DropdownMenuItem className="hover:cursor-pointer hover:bg-wwRed hover:text-white">
                           {subNav.title}
                         </DropdownMenuItem>
                       </a>
@@ -42,13 +42,13 @@ function DesktopHeader({}) {
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
-            )
+            );
           } else {
             return (
               <a href={navGroup.relLink} key={navGroup.title}>
                 <p className="hover:text-gray-500">{navGroup.title}</p>
               </a>
-            )
+            );
           }
         })}
       </div>
@@ -56,7 +56,7 @@ function DesktopHeader({}) {
         CONTACT
       </a>
     </nav>
-  )
+  );
 }
 
-export default DesktopHeader
+export default DesktopHeader;

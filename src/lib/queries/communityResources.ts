@@ -1,4 +1,4 @@
-import { client } from "@/lib/sanityClient";
+import { sanityClient } from "@/lib/sanityClient";
 
 export type CommunityResource = {
   _id: string;
@@ -39,7 +39,3 @@ export const ALL_COMMUNITY_RESOURCES_QUERY = /* groq */ `
     }
   } | order(title asc)
 `;
-
-export async function getAllCommunityResources(): Promise<CommunityResource[]> {
-  return client.fetch(ALL_COMMUNITY_RESOURCES_QUERY);
-}

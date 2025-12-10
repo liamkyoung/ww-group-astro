@@ -15,16 +15,4 @@ const blog = defineCollection({
       imgSrc: z.string().optional(),
     }),
 });
-
-const communityResource = defineCollection({
-  schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      address: z.string().optional(),
-      description: z.string().optional(),
-      category: z.string().optional(),
-      imgSrc: z.string(),
-    }),
-});
-
 export const collections = { blog };

@@ -1,0 +1,30 @@
+---
+interface Props {
+  colorScheme?: "default" | "red";
+  stat: string;
+  description: string;
+}
+
+const { colorScheme = "default", stat, description } = Astro.props;
+
+// Default colors
+let textColor = "text-wwBlack";
+let emphasisColor = "text-wwRed";
+let borderColor = "border-wwRed";
+
+// Red theme override
+if (colorScheme === "red") {
+  textColor = "text-white";
+  emphasisColor = "text-wwYellow";
+  borderColor = "border-wwYellow";
+}
+---
+
+<div class="min-w-36">
+  <h5 class={`border-l-2 pl-4 ${emphasisColor} ${borderColor}`}>
+    {stat}
+  </h5>
+  <p class={`pl-4 ${textColor}`}>
+    {description}
+  </p>
+</div>

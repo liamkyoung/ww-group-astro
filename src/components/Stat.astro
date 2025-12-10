@@ -1,0 +1,18 @@
+---
+interface Props {
+  bgColor?: string; // e.g. "bg-wwRed"
+  title: string;
+  descriptor: string;
+}
+
+const { bgColor = "bg-wwRed", title, descriptor } = Astro.props as Props;
+---
+
+<div
+  class={`${bgColor} p-6 sm:p-16 min-w-64 xl:min-w-64 2xl:min-w-64 flex items-center justify-center h-64`}
+>
+  <div class="flex items-center gap-4 mr-auto sm:block sm:items-start">
+    <h2 class="text-white">{title}</h2>
+    <p class="text-lg text-white">{descriptor}</p>
+  </div>
+</div>

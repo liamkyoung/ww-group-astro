@@ -1,0 +1,58 @@
+---
+// src/components/projects/ProjectGallery.astro (example path)
+
+import type { SanityImage } from "@/lib/schemas";
+import DefaultCard from "../Cards/DefaultCard.astro";
+import { ProjectLinks } from "@/globals/navigation/projects/projects";
+import { urlFor } from "@/lib/sanityImage";
+export interface ProjectPreview {
+  title: string;
+  image: SanityImage;
+}
+
+interface Props {
+  projects: ProjectPreview[];
+  displayHeader?: "yes" | "no";
+}
+
+const { projects, displayHeader = "yes" } = Astro.props;
+const hasProjects = Array.isArray(projects) && projects.length > 0;
+---
+
+{
+  hasProjects && (
+    <div class="global-margin-x space-y-24 my-40">
+      {displayHeader === "yes" && (
+        <div class="flex justify-center md:justify-between items-center">
+          <h2 class="text-center md:text-left">Featured Deals</h2>
+
+          <div class="hidden md:block">
+            <a class="btn-primary" href={ProjectLinks.relLink}>
+              VIEW MORE
+            </a>
+          </div>
+        </div>
+      )}
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 2xl:gap-16 3xl:gap-32
+             justify-items-center lg:justify-items-start"
+      >
+        {projects.map((project) => (
+          <div class="w-full">
+            <DefaultCard
+              title={project.title}
+              imageSrc={urlFor(project.image).url()}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div class="md:hidden flex justify-center">
+        <a class="btn-primary" href={ProjectLinks.relLink}>
+          VIEW MORE
+        </a>
+      </div>
+    </div>
+  )
+}

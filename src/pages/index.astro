@@ -8,6 +8,9 @@ import ProjectBlock from "@/components/Blocks/ProjectBlock.astro";
 import CompanyScroll from "@/components/Blocks/Company/CompanyScroll";
 import ServiceGallery from "@/components/Blocks/ServiceBlock.astro";
 import type { Service } from "@/components/Cards/ServiceCard.astro";
+import { sanityClient } from "@/lib/sanityClient";
+import { GET_HOME_PAGE_PROJECTS } from "@/lib/queries/projects";
+import ProjectGallery from "@/components/Gallery/ProjectGallery.astro";
 
 const facts: FactStat[] = [
   { factStat: "150+", factDescription: "Transactions closed" },
@@ -56,6 +59,8 @@ const services: Service[] = [
     },
   },
 ];
+
+const projects = await sanityClient.fetch(GET_HOME_PAGE_PROJECTS);
 ---
 
 <Default>
@@ -88,9 +93,8 @@ const services: Service[] = [
   />
 
   <ServiceGallery services={services} displayHeader="yes" />
+  <ProjectGallery projects={projects} />
   <CompanyScroll client:load />
-
-  <!-- Featured Projects -->
   <!-- Current Listings -->
   <CTA />
 </Default>

@@ -1,0 +1,78 @@
+---
+import CardInfo from "./CardInfo.astro";
+
+export interface Props {
+  size?: "small" | "medium" | "large" | "xl";
+  title: string;
+  imageSrc: string;
+  accentText?: string;
+  description?: string;
+  address?: string;
+  additionalInfo?: string[];
+  textOnRight?: boolean;
+  squareImage?: boolean;
+  link?: string;
+}
+
+const {
+  size = "medium",
+  title,
+  imageSrc,
+  accentText,
+  description,
+  address,
+  additionalInfo,
+  textOnRight = false,
+  squareImage = false,
+  link = "/",
+} = Astro.props;
+
+// Tailwind-safe width scale
+const sizeMap = {
+  small: "w-24",
+  medium: "w-64",
+  large: "w-72",
+  xl: "w-96",
+};
+
+const cardWidth = sizeMap[size] ?? "w-64";
+const imgSize = squareImage
+  ? "aspect-square object-cover"
+  : "w-full object-cover";
+---
+
+<div class={`inline-block ${cardWidth}`}>
+  <a href={link} class="hover:opacity-90 block">
+    <!-- Layout: image left or right -->
+    <div class={textOnRight ? "flex gap-4" : "space-y-4"}>
+      <!-- IMAGE -->
+      <div class="relative">
+        <img
+          src={imageSrc}
+          alt={title}
+          class={`${squareImage ? "aspect-square w-full object-cover" : "w-full h-64 object-cover"}`}
+          loading="lazy"
+        />
+
+        {
+          accentText && (
+            <div class="bg-gray-50 absolute -bottom-1 -left-1 p-2 rounded-md shadow-sm">
+              <p class="text-wwRed font-bold text-sm">{accentText}</p>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- TEXT -->
+      <div class={!textOnRight ? "" : "max-w-64"}>
+        <h4 class="my-2">{title}</h4>
+
+        <CardInfo
+          address={address}
+          description={description}
+          additionalInfo={additionalInfo}
+        />
+      </div>
+    </div>
+  </a>
+</div>

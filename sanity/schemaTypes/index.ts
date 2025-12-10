@@ -6,6 +6,7 @@ import teammate from './teammate'
 import communityResource from './communityResource'
 import involvement from './involvement'
 import listing from './listing/listing'
+import project from './project'
 
 export const schemaTypes = [
   post,
@@ -16,4 +17,5 @@ export const schemaTypes = [
   communityResource,
   involvement,
   listing,
+  project,
 ]

@@ -73,11 +73,11 @@ const LOGOS: { src: string; alt: string }[] = [
     alt: "Skyward Living real estate logo",
   },
   {
-    src: "src/assets/logos/st-pete-athletic-logo.png",
+    src: "src/assets/logos/st-pete-athletic.png",
     alt: "St. Pete Athletic logo",
   },
   {
-    src: "src/assets/logos/the-bank-of-tampa-logo.png",
+    src: "src/assets/logos/the-bank-of-tampa.png",
     alt: "The Bank of Tampa logo",
   },
   {

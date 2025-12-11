@@ -54,8 +54,7 @@ export default defineType({
     defineField({
       name: 'bioParagraph',
       title: 'Bio Paragraph',
-      type: 'array',
-      of: [{type: 'block'}], // rich text
+      type: 'blockContent',
       fieldset: 'overview',
       validation: (Rule) => Rule.required(),
     }),
@@ -64,6 +63,9 @@ export default defineType({
       title: 'Specialization',
       type: 'string',
       fieldset: 'overview',
+      options: {
+        list: ['Commercial', 'Residential', 'Marketing'],
+      },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -83,7 +85,7 @@ export default defineType({
       type: 'number',
       fieldset: 'overview',
       validation: (Rule) =>
-        Rule.required().integer().min(0).error('Rank must be a non-negative integer'),
+        Rule.required().integer().min(1).error('Rank must be a non-negative integer'),
     }),
     defineField({
       name: 'favoritePlaces',
@@ -137,6 +139,11 @@ export default defineType({
       title: 'Instagram Username',
       type: 'string',
       fieldset: 'socials',
+      validation: (Rule) =>
+        Rule.custom((value) => {
+          if (!value) return true
+          return value.startsWith('@') ? true : 'Instagram handle must start with @'
+        }),
     }),
     defineField({
       name: 'facebook',

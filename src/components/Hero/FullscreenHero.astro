@@ -7,7 +7,7 @@ interface HeroLink {
 
 interface Props {
   headerText: string;
-  bodyText?: string; // plain string instead of RichText
+  bodyText?: string[]; // plain string instead of RichText
   links?: HeroLink[];
 
   // Media
@@ -20,7 +20,7 @@ interface Props {
 
 const {
   headerText,
-  bodyText,
+  bodyText = [],
   links = [],
   videoUrl,
   backupImageUrl,
@@ -57,11 +57,13 @@ const gradientColor = getGradientColor(gradient);
         {
           bodyText && (
             <div class="overflow-y-scroll max-h-64 sm:max-h-96 no-scrollbar">
-              <p
-                class={`md:text-lg font-medium text-sm text-white ${!centeredText ? "lg:w-full" : ""}`}
-              >
-                {bodyText}
-              </p>
+              {bodyText.map((paragraph) => (
+                <p
+                  class={`md:text-lg font-medium text-sm text-white ${!centeredText ? "lg:w-full" : ""} mb-6`}
+                >
+                  {paragraph}
+                </p>
+              ))}
             </div>
           )
         }

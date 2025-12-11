@@ -66,7 +66,9 @@ const projects = await sanityClient.fetch(GET_HOME_PAGE_PROJECTS);
 <Default>
   <FullscreenHero
     headerText="WITTNER WOLLMAN GROUP: TRANSFORMING THE FUTURE OF ST. PETE & TAMPA BAY"
-    bodyText="Our team of stellar commercial and residential agents have a talent for envisioning the future of our town. Partner with us to make your mark."
+    bodyText={[
+      "Our team of stellar commercial and residential agents have a talent for envisioning the future of our town. Partner with us to make your mark.",
+    ]}
     videoUrl="https://ww-group.nyc3.cdn.digitaloceanspaces.com/website_vid.mp4"
     backupImageUrl="src/assets/images/reflection-eagle-pov.webp"
     centeredText={false}

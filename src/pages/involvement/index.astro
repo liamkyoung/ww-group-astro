@@ -3,7 +3,8 @@ import { sanityClient } from "@/lib/sanityClient";
 import Default from "@/layouts/Default.astro";
 import DefaultHero from "@/components/Hero/DefaultHero.astro";
 import HeroImg from "@/assets/hero/Community_Resources_Header.webp";
-import { INVOLVEMENT_QUERY, type Involvement } from "@/lib/queries/involvement";
+import { INVOLVEMENT_QUERY } from "@/lib/queries/involvement";
+import { type Involvement } from "@/globals/types/involvement";
 import InvolvementCard from "@/components/Cards/InvolvementCard.astro";
 
 const involvement = await sanityClient.fetch(INVOLVEMENT_QUERY);

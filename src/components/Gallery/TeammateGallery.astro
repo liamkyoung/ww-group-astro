@@ -1,0 +1,33 @@
+---
+// TeammateGallery.astro
+
+import TeammateCard from "@/components/Cards/TeammateCard.astro";
+import type { TeammatePreview } from "@/globals/types/teammate";
+
+interface Props {
+  teammates: TeammatePreview[];
+  displayHeader?: "yes" | "no";
+}
+
+const { teammates = [], displayHeader = "no" } = Astro.props;
+---
+
+<div class="bg-wwRed pb-36">
+  <div class="global-margin-x">
+    {
+      displayHeader === "yes" && (
+        <div class="bg-wwRed pt-24">
+          <h2 class="text-white text-center sm:text-left">
+            The Wittner Wollman Group
+          </h2>
+        </div>
+      )
+    }
+
+    <div
+      class="bg-wwRed place-items-center lg:place-items-start grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-24 py-24"
+    >
+      {teammates.map((t) => <TeammateCard doc={t} />)}
+    </div>
+  </div>
+</div>

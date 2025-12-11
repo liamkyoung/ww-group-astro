@@ -1,6 +1,6 @@
-import type { NavGrouping } from '../../../app/types/viewmodels'
+import type { NavGrouping } from "@/globals/viewmodels";
 
 export const ListingLinks: NavGrouping = {
-  title: 'Listings',
-  relLink: '/listings',
-}
+  title: "Listings",
+  relLink: "/listings",
+};

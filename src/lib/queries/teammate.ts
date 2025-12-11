@@ -1,32 +1,26 @@
+import type { TeammatePreview } from "@/globals/types/teammate";
+import { sanityClient } from "../sanityClient";
 import type { SanityImage } from "../schemas";
 
-export interface Teammate {
-  _id: string;
-  _type: "teammate";
+const ALL_TEAMMATE_PREVIEW_QUERY = `
+  *[_type == "teammate"]
+  | order(rank asc) {
+    _id,
+    title,
+    profilePic,
+    email,
+    phoneNumber,
+    instagram,
+    facebook,
+    linkedin,
+    strengths,
+    "slug": slug.current
+  }
+`;
 
-  // OVERVIEW
-  title: string;
-  profilePic: SanityImage;
-  jobTitle: string;
-  profileIntroduction: string;
-  bioParagraph: any; // rich text
-  strengths: string;
-  yearsOfExperience: number;
-  rank: number;
-
-  favoritePlaces?: Array<{
-    _ref: string; // reference to communityResource
-    _type: "reference";
-  }>;
-
-  // SOCIALS
-  phoneNumber: string;
-  officeNumber?: string;
-  email: string;
-  instagram?: string;
-  facebook?: string;
-  linkedin?: string;
-
-  // META
-  slug: string;
+export async function getAllTeammates(): Promise<TeammatePreview[]> {
+  const data = await sanityClient.fetch<TeammatePreview[]>(
+    ALL_TEAMMATE_PREVIEW_QUERY,
+  );
+  return data;
 }

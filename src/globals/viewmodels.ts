@@ -1,4 +1,5 @@
-import { Image } from 'astro:assets'
+import type { SanityImage } from "@/lib/schemas";
+import { Image } from "astro:assets";
 
 // COULD BREAK IF UNDERLYING Listing Type changes
 // export interface ListingCardDTO {
@@ -89,19 +90,19 @@ import { Image } from 'astro:assets'
 // }
 
 export interface Socials {
-  linkedin?: SocialMediaInfo
-  twitter?: SocialMediaInfo
-  facebook: SocialMediaInfo
-  instagram: SocialMediaInfo
-  address: string
-  phoneNumber: string
-  email: string
+  linkedin?: SocialMediaInfo;
+  twitter?: SocialMediaInfo;
+  facebook: SocialMediaInfo;
+  instagram: SocialMediaInfo;
+  address: string;
+  phoneNumber: string;
+  email: string;
 }
 
 export interface SocialMediaInfo {
-  platformName: string
-  username: string
-  profileLink: string
+  platformName: string;
+  username: string;
+  profileLink: string;
 }
 
 export enum CardSize {
@@ -121,75 +122,60 @@ export enum ColorScheme {
 }
 
 export interface NavGrouping {
-  title: string
-  relLink: string
-  subNavigation?: NavGrouping[]
+  title: string;
+  relLink: string;
+  subNavigation?: NavGrouping[];
 }
 
 export interface MapSettings {
-  mapCenter: MapCoords
+  mapCenter: MapCoords;
 }
 
 export interface MapCoords {
-  lat: number
-  lng: number
+  lat: number;
+  lng: number;
 }
-
-// export interface GoogleMapPin {
-//   name: string
-//   coords: MapCoords
-//   slug: string
-//   coverImg?: Image
-//   address?: string
-//   price?: number
-// }
 
 export interface FactStat {
-  factStat: string
-  factDescription: string
-  id?: string | null
-}
-
-export enum SortListingsEnum {
-  NEWEST,
-  LEAST_EXPENSIVE,
-  MOST_EXPENSIVE,
+  factStat: string;
+  factDescription: string;
+  id?: string | null;
 }
 
 export type PropertyType =
-  | 'singleFamily'
-  | 'multiFamily'
-  | 'townhouse'
-  | 'condo'
-  | 'co-op'
-  | 'apt'
-  | 'mobileHome'
-  | 'vacationHome'
-  | 'seniorLivingHome'
-  | 'shoppingCenter'
-  | 'bizOpportunity'
-  | 'office'
-  | 'retail'
-  | 'industrial'
-  | 'mixedUse'
-  | 'hotel'
-  | 'motel'
-  | 'restaurant'
-  | 'healthcareFacility'
-  | 'storageUnit'
-  | 'vacantLand'
-  | 'agriculturalLand'
-  | 'timberland'
-  | 'ranchLand'
-  | 'recreationalLand'
-  | 'developmentLand'
-  | 'religion'
-  | 'school'
-  | 'university'
-  | 'governmentBuilding'
-  | 'cemetery'
-  | 'airport'
-  | 'utility'
-  | 'reit'
-  | 'rentalProperty'
-  | 'fixAndFlip'
+  | "singleFamily"
+  | "multiFamily"
+  | "townhouse"
+  | "condo"
+  | "co-op"
+  | "apt"
+  | "mobileHome"
+  | "vacationHome"
+  | "seniorLivingHome"
+  | "shoppingCenter"
+  | "bizOpportunity"
+  | "office"
+  | "retail"
+  | "industrial"
+  | "mixedUse"
+  | "hotel"
+  | "motel"
+  | "restaurant"
+  | "healthcareFacility"
+  | "storageUnit"
+  | "vacantLand"
+  | "agriculturalLand"
+  | "timberland"
+  | "ranchLand"
+  | "recreationalLand"
+  | "developmentLand"
+  | "religion"
+  | "school"
+  | "university"
+  | "governmentBuilding"
+  | "cemetery"
+  | "airport"
+  | "utility"
+  | "reit"
+  | "rentalProperty"
+  | "fixAndFlip";

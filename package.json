@@ -27,6 +27,7 @@
     "@sanity/client": "^7.13.1",
     "@sanity/image-url": "^2.0.2",
     "@tailwindcss/vite": "^4.1.17",
+    "@vis.gl/react-google-maps": "^1.7.1",
     "astro": "^5.16.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

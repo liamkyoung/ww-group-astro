@@ -102,7 +102,6 @@ export default defineType({
       title: 'City',
       type: 'string',
       fieldset: 'overview',
-      hidden: true,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -110,7 +109,6 @@ export default defineType({
       title: 'Zip Code',
       type: 'string',
       fieldset: 'overview',
-      hidden: true,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -118,7 +116,6 @@ export default defineType({
       title: 'County',
       type: 'string',
       fieldset: 'overview',
-      hidden: true,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -126,7 +123,6 @@ export default defineType({
       title: 'State',
       type: 'string',
       fieldset: 'overview',
-      hidden: true,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -134,7 +130,6 @@ export default defineType({
       title: 'Latitude',
       type: 'number',
       fieldset: 'overview',
-      hidden: true,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -142,7 +137,6 @@ export default defineType({
       title: 'Longitude',
       type: 'number',
       fieldset: 'overview',
-      hidden: true,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -304,8 +298,7 @@ export default defineType({
     defineField({
       name: 'fullDescription',
       title: 'Full Property Description',
-      type: 'array',
-      of: [{type: 'block'}],
+      type: 'blockContent',
       fieldset: 'features',
     }),
     defineField({

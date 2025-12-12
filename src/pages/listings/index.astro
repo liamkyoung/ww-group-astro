@@ -1,7 +1,11 @@
 ---
 import Default from "@/layouts/Default.astro";
+import { getAllListingPreviews } from "@/lib/queries/listings";
+import { ListingGallery } from "@/components/Gallery/ListingGallery";
+
+const listings = await getAllListingPreviews();
 ---
 
 <Default>
-  <p>Listings</p>
+  <ListingGallery listings={listings} client:load />
 </Default>

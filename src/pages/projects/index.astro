@@ -1,6 +1,5 @@
 ---
 import Default from "@/layouts/Default.astro";
-import type { ProjectPreview } from "@/components/Gallery/ProjectGallery.astro";
 import { getAllProjects } from "@/lib/queries/projects";
 import ProjectBlock, {
   type ProjectLink,
@@ -9,6 +8,7 @@ import { urlFor } from "@/lib/sanityImage";
 import { ProjectHero } from "@/components/Hero/ProjectHero";
 import type { GoogleMapPin } from "@/globals/types/listing";
 import DefaultHero from "@/components/Hero/DefaultHero.astro";
+import { instagramHandleToUrl } from "@/lib/instgramHandleToURL";
 
 const projects = await getAllProjects();
 const pins: GoogleMapPin[] | undefined = projects?.map((p) => ({
@@ -44,7 +44,7 @@ const pins: GoogleMapPin[] | undefined = projects?.map((p) => ({
           });
         if (p.instagram)
           links.push({
-            href: "https://instagram.com/" + p.instagram,
+            href: instagramHandleToUrl(p.instagram),
             label: "Instagram",
             appearance: "secondary",
           });

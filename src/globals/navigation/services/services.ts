@@ -23,7 +23,7 @@ export const ConsultingService: NavGrouping = {
 
 export const ServiceLinks: NavGrouping = {
   title: "Services",
-  relLink: "/services",
+  relLink: "",
   subNavigation: [
     LeasingService,
     SalesService,

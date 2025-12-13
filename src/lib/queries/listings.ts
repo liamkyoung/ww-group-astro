@@ -8,15 +8,7 @@ export const LISTING_PREVIEWS_QUERY = `
       _id,
       "slug": slug.current,
       title,
-
-      // NEW: full nested location object
       location,
-
-      // Optional denormalized fields for convenience / backward compatibility
-      "address": location.address,
-      "latitude": location.latitude,
-      "longitude": location.longitude,
-
       sqFt,
       sqFtLand,
       sqFtLot,
@@ -28,8 +20,6 @@ export const LISTING_PREVIEWS_QUERY = `
       listingType,
       paymentFrequency,
       "updatedAt": coalesce(_updatedAt, _createdAt),
-
-      // Resolve agents references to teammate documents
       "agents": agents[]->{
         _id,
         _type,
@@ -129,6 +119,32 @@ export const LISTING_SLUGS_QUERY = `
   }
 `;
 
+export const LISTING_PREVIEWS_BY_AGENT_SLUG_QUERY = `
+  *[
+    _type == "listing" &&
+    defined(slug.current) &&
+    $agentSlug in agents[]->slug.current
+  ]
+  | order(coalesce(_updatedAt, _createdAt) desc) {
+    _id,
+    "slug": slug.current,
+    title,
+    location,
+    sqFt,
+    sqFtLand,
+    sqFtLot,
+    bedCount,
+    bathroomCount,
+    coverImage,
+    price,
+    isPriceNegotiable,
+    listingType,
+    paymentFrequency,
+    "updatedAt": coalesce(_updatedAt, _createdAt),
+    "propertyType": propertyTypes
+  }
+`;
+
 /**
  * Fetch all listings as ListingPreview[]
  */
@@ -149,4 +165,14 @@ export async function getListingBySlug(slug: string): Promise<Listing | null> {
     { slug },
   );
   return listing ?? null;
+}
+
+export async function getListingPreviewsByAgentSlug(
+  agentSlug: string,
+): Promise<ListingPreview[]> {
+  const res = sanityClient.fetch(LISTING_PREVIEWS_BY_AGENT_SLUG_QUERY, {
+    agentSlug,
+  });
+
+  return res;
 }

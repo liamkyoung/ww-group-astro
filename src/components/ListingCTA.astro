@@ -3,6 +3,7 @@ import SocialList from "./SocialList.astro"; // adjust if needed
 import { urlFor } from "@/lib/sanityImage"; // your Sanity image builder helper
 import type { Teammate } from "@/globals/types/teammate"; // or wherever Teammate lives
 import type { SanityImage } from "@/lib/schemas";
+import { instagramHandleToUrl } from "@/lib/instgramHandleToURL";
 
 export interface ListingCTAProps {
   agent: Teammate;
@@ -12,9 +13,7 @@ export interface ListingCTAProps {
 const { agent } = Astro.props as ListingCTAProps;
 
 // Normalize socials
-const instagramHandle = agent.instagram
-  ? agent.instagram.replace(/^@/, "")
-  : null;
+const instagramHandle = agent.instagram;
 const facebookHandle = agent.facebook ?? null;
 
 // Profile image (SanityImage → URL via urlFor)
@@ -43,7 +42,7 @@ const profilePicUrl = profilePic
           instagram={instagramHandle
             ? {
                 username: instagramHandle,
-                profileLink: `https://instagram.com/${instagramHandle}`,
+                profileLink: instagramHandleToUrl(instagramHandle),
               }
             : null}
           facebook={facebookHandle

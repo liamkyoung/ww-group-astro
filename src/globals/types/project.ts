@@ -34,6 +34,11 @@ export interface ProjectPreview {
   };
 }
 
+export interface ProjectMin {
+  title: string;
+  image: SanityImage;
+}
+
 export interface ProjectSlide {
   _key?: string; // Sanity array items usually have _key
   image: SanityImage;

@@ -5,13 +5,10 @@ import type { SanityImage } from "@/lib/schemas";
 import DefaultCard from "../Cards/DefaultCard.astro";
 import { ProjectLinks } from "@/globals/navigation/projects/projects";
 import { urlFor } from "@/lib/sanityImage";
-export interface ProjectPreview {
-  title: string;
-  image: SanityImage;
-}
+import type { ProjectMin } from "@/globals/types/project";
 
 interface Props {
-  projects: ProjectPreview[];
+  projects: ProjectMin[];
   displayHeader?: "yes" | "no";
 }
 

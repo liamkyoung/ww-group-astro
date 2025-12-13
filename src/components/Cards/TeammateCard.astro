@@ -2,6 +2,7 @@
 import { urlFor } from "@/lib/sanityImage";
 import SocialIcon from "../SocialIcon.astro";
 import type { TeammatePreview } from "@/globals/types/teammate";
+import { instagramHandleToUrl } from "@/lib/instgramHandleToURL";
 
 const { doc: teammate, title: titleFromProps } = Astro.props as {
   doc: TeammatePreview;
@@ -24,7 +25,6 @@ const {
 
 const titleToUse = titleFromProps ?? title;
 // Normalize socials a bit
-const instagramHandle = instagram ? instagram.replace(/^@/, "") : "";
 const linkedinUrl =
   linkedin && linkedin.startsWith("http")
     ? linkedin
@@ -158,7 +158,7 @@ const linkedinUrl =
       instagramHandle && (
         <SocialIcon
           type="instagram"
-          href={`https://instagram.com/${instagramHandle}`}
+          href={instagramHandleToUrl(instagramHandle)}
           label={instagram}
           showLabel={false}
           colorScheme="default"

@@ -1,7 +1,11 @@
 import type { SanityReference } from "@sanity/client";
 import type { SanityImage } from "../schemas";
 import { sanityClient } from "../sanityClient";
-import type { Project, ProjectPreview } from "@/globals/types/project";
+import type {
+  Project,
+  ProjectMin,
+  ProjectPreview,
+} from "@/globals/types/project";
 
 export interface ProjectSliderItem {
   _key: string;
@@ -11,7 +15,7 @@ export interface ProjectSliderItem {
 export const GET_HOME_PAGE_PROJECTS = `*[_type == "project" && defined(publishedAt)]
 | order(publishedAt desc)[0...4]{
   title,
-  "image": slider[0].image
+  "image": slider[0].image,
 }`;
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
@@ -21,19 +25,19 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   return sanityClient.fetch(query, { slug });
 }
 
-export async function getProjectsByTeammate(
-  teammateId: string,
-): Promise<Project[] | null> {
+export async function getProjectsByTeammateSlug(
+  teammateSlug: string,
+): Promise<ProjectMin[] | null> {
   const query = `*[
-  _type == "project" &&
-  $teammateId in agents[]._ref
-]
-| order(publishedAt desc){
-  title,
-  slug,
-  "image": slider[0].image
-}`;
-  return sanityClient.fetch(query, { teammateId });
+    _type == "project" &&
+    $teammateSlug in agents[]->slug.current
+  ] | order(publishedAt desc){
+    title,
+    slug,
+    "image": slider[0].image
+  }`;
+
+  return sanityClient.fetch(query, { teammateSlug });
 }
 
 export async function getAllProjects(): Promise<ProjectPreview[] | null> {

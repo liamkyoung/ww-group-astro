@@ -7,6 +7,12 @@ import { portableTextToHtml } from "@/lib/portableText";
 import { urlFor } from "@/lib/sanityImage";
 import TeammateHero from "@/components/Hero/TeammateHero.astro";
 import ContactAndBio from "@/components/ContactAndBio.astro";
+import { getProjectsByTeammateSlug } from "@/lib/queries/projects";
+import ProjectGallery from "@/components/Gallery/ProjectGallery.astro";
+import CommunityResourceGallery from "@/components/Gallery/CommunityResourceGallery.astro";
+import { getCommunityResourcesByTeammateSlug } from "@/lib/queries/communityResources";
+import { getListingPreviewsByAgentSlug } from "@/lib/queries/listings";
+import { ListingGallery } from "@/components/Gallery/ListingGallery";
 
 // Build all static paths at build-time
 export async function getStaticPaths() {
@@ -46,17 +52,11 @@ const {
 // TODO: when you wire image URLs, use your urlFor() helper or sanity-image-url here.
 
 const bioHtml = portableTextToHtml(bioParagraph);
+const projects = await getProjectsByTeammateSlug(slug);
+const commResources = await getCommunityResourcesByTeammateSlug(slug);
+const listings = await getListingPreviewsByAgentSlug(slug);
 ---
 
-<!-- interface Props {
-  name: string;
-  jobTitle: string;
-  shortDescription: string;
-  yearsOfExperience?: number;
-  strength?: string;
-  fullBodyImage?: SanityImage | null;
-  backHref?: string; // defaults to /team
-} -->
 <Default>
   <section class="global-margin-x my-24 space-y-12">
     <TeammateHero
@@ -75,6 +75,20 @@ const bioHtml = portableTextToHtml(bioParagraph);
       instagram={instagram}
       facebook={facebook}
       bioHtml={bioHtml}
+    />
+  </section>
+
+  <ListingGallery listings={listings} />
+  {projects && <ProjectGallery projects={projects} />}
+
+  <section>
+    <div class="global-margin-x mb-10">
+      <h2>My Favorite Places in Tampa Bay</h2>
+    </div>
+
+    <CommunityResourceGallery
+      displayHeader="yes"
+      communityResources={commResources}
     />
   </section>
 </Default>

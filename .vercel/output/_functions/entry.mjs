@@ -1,6 +1,6 @@
 import { renderers } from './renderers.mjs';
 import { c as createExports, s as serverEntrypointModule } from './chunks/_@astrojs-ssr-adapter_Czi9iYuq.mjs';
-import { manifest } from './manifest_Csb4jX28.mjs';
+import { manifest } from './manifest_CUwcIMfj.mjs';
 
 const serverIslandMap = new Map();;
 
@@ -20,9 +20,10 @@ const _page12 = () => import('./pages/services/acquisition.astro.mjs');
 const _page13 = () => import('./pages/services/consulting.astro.mjs');
 const _page14 = () => import('./pages/services/leasing.astro.mjs');
 const _page15 = () => import('./pages/services/sales.astro.mjs');
-const _page16 = () => import('./pages/team.astro.mjs');
-const _page17 = () => import('./pages/team/_---slug_.astro.mjs');
-const _page18 = () => import('./pages/index.astro.mjs');
+const _page16 = () => import('./pages/services.astro.mjs');
+const _page17 = () => import('./pages/team.astro.mjs');
+const _page18 = () => import('./pages/team/_---slug_.astro.mjs');
+const _page19 = () => import('./pages/index.astro.mjs');
 const pageMap = new Map([
     ["node_modules/astro/dist/assets/endpoint/generic.js", _page0],
     ["src/pages/404.astro", _page1],
@@ -40,9 +41,10 @@ const pageMap = new Map([
     ["src/pages/services/consulting/index.astro", _page13],
     ["src/pages/services/leasing/index.astro", _page14],
     ["src/pages/services/sales/index.astro", _page15],
-    ["src/pages/team/index.astro", _page16],
-    ["src/pages/team/[...slug].astro", _page17],
-    ["src/pages/index.astro", _page18]
+    ["src/pages/services/index.astro", _page16],
+    ["src/pages/team/index.astro", _page17],
+    ["src/pages/team/[...slug].astro", _page18],
+    ["src/pages/index.astro", _page19]
 ]);
 
 const _manifest = Object.assign(manifest, {
@@ -53,7 +55,7 @@ const _manifest = Object.assign(manifest, {
     middleware: () => import('./_noop-middleware.mjs')
 });
 const _args = {
-    "middlewareSecret": "1c90df22-f3b1-4f63-a339-c4b718e93d41",
+    "middlewareSecret": "54d0b63a-8b22-4063-85de-8df1d07001e5",
     "skewProtection": false
 };
 const _exports = createExports(_manifest, _args);

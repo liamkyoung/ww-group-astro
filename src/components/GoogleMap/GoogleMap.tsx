@@ -35,14 +35,14 @@ export const GoogleMap = ({
 
   return (
     <div className="flex">
-      <APIProvider apiKey={import.meta.env.GOOGLE_MAP_API_KEY}>
+      <APIProvider apiKey={import.meta.env.PUBLIC_GOOGLE_MAP_API_KEY}>
         <Map
           style={{ width: widthValue, height: heightValue }}
           defaultCenter={GoogleMapsDefaults.mapCenter}
           defaultZoom={mapZoom}
           gestureHandling={"greedy"}
           disableDefaultUI={true}
-          mapId={import.meta.env.GOOGLE_MAPS_ID}
+          mapId={import.meta.env.PUBLIC_GOOGLE_MAPS_ID}
         >
           {pins &&
             pins.map((p, i) => (

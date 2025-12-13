@@ -1,0 +1,201 @@
+---
+import type { ListingGalleryImage } from "@/globals/types/listing"; // adjust path
+import { urlFor } from "@/lib/sanityImage";
+export interface Props {
+  imageGallery: ListingGalleryImage[];
+}
+
+const { imageGallery } = Astro.props as Props;
+
+const hasImages = imageGallery && imageGallery.length > 0;
+
+// Helper functions for Sanity images
+const getImageUrl = (img: ListingGalleryImage) => img?.image?.asset?.url ?? "";
+
+const getAlt = (img: ListingGalleryImage, fallbackIndex: number) =>
+  (img?.image as any)?.alt ||
+  img?.caption ||
+  `Listing image ${fallbackIndex + 1}`;
+
+// Unique ID to scope the lightbox JS to this instance
+const galleryId = `gallery-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+{
+  hasImages && (
+    <div id={galleryId} class="w-full">
+      <div class="flex gap-4 mt-8">
+        {/* Main image */}
+        <div class="lg:w-3/4 w-full">
+          {imageGallery.map(
+            (img, index) =>
+              index === 0 && (
+                <div>
+                  <img
+                    src={urlFor(img?.image).url()}
+                    alt={getAlt(img, index)}
+                    class="w-full h-auto object-cover rounded-md"
+                    loading="eager"
+                  />
+                </div>
+              ),
+          )}
+        </div>
+
+        {/* Side thumbnails (only on lg screens) */}
+        <div class="hidden w-1/4 lg:flex flex-col gap-8">
+          {imageGallery.map(
+            (img, index) =>
+              index !== 0 &&
+              index < 3 && (
+                <div>
+                  <img
+                    src={urlFor(img?.image).url()}
+                    alt={getAlt(img, index)}
+                    class="w-full h-auto object-cover rounded-md"
+                    loading="lazy"
+                  />
+                </div>
+              ),
+          )}
+        </div>
+      </div>
+
+      {/* Open lightbox button */}
+      <div class="flex justify-center mt-4">
+        <button type="button" class="btn-primary" data-lightbox-open>
+          SEE FULL GALLERY
+        </button>
+      </div>
+
+      {/* Lightbox overlay */}
+      <div
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80"
+        data-lightbox-overlay
+      >
+        <button
+          type="button"
+          class="absolute top-4 right-4 text-white text-2xl"
+          aria-label="Close gallery"
+          data-lightbox-close
+        >
+          ×
+        </button>
+
+        {/* Prev / Next controls */}
+        <button
+          type="button"
+          class="absolute left-4 text-white text-3xl px-3 py-2 bg-black/40 rounded-full"
+          aria-label="Previous image"
+          data-lightbox-prev
+        >
+          ‹
+        </button>
+
+        <button
+          type="button"
+          class="absolute right-4 text-white text-3xl px-3 py-2 bg-black/40 rounded-full"
+          aria-label="Next image"
+          data-lightbox-next
+        >
+          ›
+        </button>
+
+        {/* Slide container */}
+        <div class="max-w-5xl w-full px-4">
+          <div class="relative w-full">
+            {imageGallery.map((img, index) => (
+              <figure
+                key={index}
+                class={`w-full ${index === 0 ? "block" : "hidden"}`}
+                data-lightbox-slide
+                data-index={index}
+              >
+                <img
+                  src={getImageUrl(img)}
+                  alt={getAlt(img, index)}
+                  class="w-full h-auto object-contain max-h-[80vh] rounded-md"
+                  loading="lazy"
+                />
+                {img.caption && (
+                  <figcaption class="mt-2 text-center text-sm text-gray-200">
+                    {img.caption}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+<script is:inline>
+  (() => {
+    const root = document.getElementById("{galleryId}");
+    if (!root) return;
+
+    const overlay = root.querySelector("[data-lightbox-overlay]");
+    const openBtn = root.querySelector("[data-lightbox-open]");
+    const closeBtn = root.querySelector("[data-lightbox-close]");
+    const prevBtn = root.querySelector("[data-lightbox-prev]");
+    const nextBtn = root.querySelector("[data-lightbox-next]");
+    const slides = Array.from(
+      root.querySelectorAll("[data-lightbox-slide]"),
+    ) as HTMLElement[];
+
+    if (!overlay || !openBtn || !closeBtn || slides.length === 0) return;
+
+    let currentIndex = 0;
+
+    const showSlide = (index: number) => {
+      if (index < 0) index = slides.length - 1;
+      if (index >= slides.length) index = 0;
+      currentIndex = index;
+
+      slides.forEach((slide, i) => {
+        if (i === currentIndex) {
+          slide.classList.remove("hidden");
+          slide.classList.add("block");
+        } else {
+          slide.classList.remove("block");
+          slide.classList.add("hidden");
+        }
+      });
+    };
+
+    const openLightbox = () => {
+      overlay.classList.remove("hidden");
+      overlay.classList.add("flex");
+      showSlide(currentIndex);
+      document.body.style.overflow = "hidden";
+    };
+
+    const closeLightbox = () => {
+      overlay.classList.remove("flex");
+      overlay.classList.add("hidden");
+      document.body.style.overflow = "";
+    };
+
+    openBtn.addEventListener("click", openLightbox);
+    closeBtn.addEventListener("click", closeLightbox);
+
+    prevBtn?.addEventListener("click", () => showSlide(currentIndex - 1));
+    nextBtn?.addEventListener("click", () => showSlide(currentIndex + 1));
+
+    // Close on overlay click (but not when clicking image / controls)
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) {
+        closeLightbox();
+      }
+    });
+
+    // Escape key closes lightbox
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !overlay.classList.contains("hidden")) {
+        closeLightbox();
+      }
+    });
+  })();
+</script>

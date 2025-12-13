@@ -4,7 +4,7 @@ import { ContactLink } from "@/globals/navigation/contact/contact";
 import { urlFor } from "@/lib/sanityImage";
 
 export type HeroProps = {
-  body?: string;
+  body?: string[];
   imageSrc?: any;
   header?: string;
 };
@@ -16,7 +16,7 @@ const { body, imageSrc, header } = Astro.props as HeroProps;
   <div class="global-margin-x sm:mt-24">
     <div>
       {header && <h1 class="mb-10">{header}</h1>}
-      {body && <p>{body}</p>}
+      {body && body.map((p) => <p class="mb-6">{p}</p>)}
     </div>
 
     <div

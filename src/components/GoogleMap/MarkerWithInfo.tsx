@@ -65,11 +65,19 @@ export const MarkerWithInfo = ({
               className=""
             >
               <div>
-                {image && (
+                {href && image ? (
+                  <a href={finalHref}>
+                    <img
+                      src={urlFor(image).url()}
+                      alt={title}
+                      className="w-64 object-cover"
+                    />
+                  </a>
+                ) : (
                   <img
                     src={urlFor(image).url()}
                     alt={title}
-                    className="aspect-square w-full object-cover"
+                    className="w-64 object-cover"
                   />
                 )}
                 <h4 className="my-2">{title}</h4>

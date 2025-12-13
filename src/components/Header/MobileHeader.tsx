@@ -38,7 +38,7 @@ function MobileHeader({}) {
             </svg>
           </div>
         </SheetTrigger>
-        <SheetContent side={"left"}>
+        <SheetContent side={"left"} className="bg-white">
           <SheetHeader>
             <SheetTitle>
               <a href="/" className="flex items-center gap-6">

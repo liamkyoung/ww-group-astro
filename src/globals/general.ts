@@ -58,3 +58,11 @@ export const MetaKeywords: string[] = [
   "commercial real estate",
   "keller williams",
 ];
+
+export interface LocationPreview {
+  address: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  city?: string | null;
+  state?: string | null;
+}

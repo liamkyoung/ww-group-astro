@@ -1,0 +1,163 @@
+---
+import { formatDollarAmount } from "@/lib/formatDollarAmount";
+import {
+  formatPropertyType,
+  formatZoningType,
+} from "@/lib/propertyTypeFormatter";
+
+export interface ListingFeaturesProps {
+  bedrooms?: number;
+  bathrooms?: number;
+  sqFt?: number;
+  yearBuilt?: number;
+  yearRenovated?: number;
+  propertyType?: string;
+  isPriceNegotiable?: boolean;
+  price?: number;
+  sqFtLand?: number;
+  status?: string;
+  occupancy?: number;
+  area?: string;
+  zipCode?: string;
+  zoningType?: string;
+
+  // Additional Info
+  cool?: string;
+  heat?: string;
+  lighting?: string;
+  electricity?: string;
+  water?: string;
+  waste?: string;
+  sewer?: string;
+  internet?: string;
+  hasParking?: boolean;
+  parkingDescription?: string;
+  buildingClass?: string;
+  sqFtLot?: number;
+}
+
+type Feature = {
+  label: string;
+  description?: string | number | null;
+};
+
+const {
+  bedrooms,
+  bathrooms,
+  sqFt,
+  yearBuilt,
+  yearRenovated,
+  propertyType,
+  isPriceNegotiable,
+  price,
+  sqFtLand,
+  status,
+  area,
+  zipCode,
+  zoningType,
+  occupancy,
+  cool,
+  heat,
+  lighting,
+  electricity,
+  water,
+  waste,
+  sewer,
+  internet,
+  hasParking,
+  parkingDescription,
+  buildingClass,
+  sqFtLot,
+} = Astro.props as ListingFeaturesProps;
+
+const rawFeatures: Feature[] = [
+  { label: "Status", description: status },
+  { label: "Bedrooms", description: bedrooms },
+  { label: "Bathrooms", description: bathrooms },
+  { label: "Square Footage", description: sqFt },
+  { label: "Year Built", description: yearBuilt },
+  { label: "Year Renovated", description: yearRenovated },
+  {
+    label: "Building Type",
+    description: propertyType ? formatPropertyType(propertyType) : null,
+  },
+  { label: "Building Class", description: buildingClass },
+  {
+    label: "Zoning Type",
+    description: zoningType ? formatZoningType(zoningType) : null,
+  },
+  { label: "Area", description: area },
+  { label: "Zip Code", description: zipCode },
+  {
+    label: "Occupancy",
+    description: typeof occupancy === "number" ? `${occupancy}%` : null,
+  },
+  {
+    label: "Price",
+    description:
+      isPriceNegotiable || !price ? "Negotiable" : formatDollarAmount(price),
+  },
+  { label: "Land Square Footage", description: sqFtLand },
+  { label: "Lot Square Footage", description: sqFtLot },
+
+  { label: "Cooling", description: cool },
+  { label: "Heating", description: heat },
+  { label: "Lighting", description: lighting },
+  { label: "Electricity", description: electricity },
+  { label: "Water", description: water },
+  { label: "Sewage", description: sewer },
+  { label: "Waste", description: waste },
+  { label: "Internet", description: internet },
+  {
+    label: "Parking",
+    description: hasParking != null ? (hasParking ? "Yes" : "No") : null,
+  },
+  {
+    label: "Parking Spots",
+    description: hasParking ? parkingDescription : null,
+  },
+];
+
+// Filter out null/undefined/"n_a"
+const features = rawFeatures.filter(
+  (f) =>
+    f.description !== undefined &&
+    f.description !== null &&
+    f.description !== "n_a",
+);
+
+// Split into two roughly equal columns
+const mid = Math.ceil(features.length / 2);
+const leftFeatures = features.slice(0, mid);
+const rightFeatures = features.slice(mid);
+---
+
+{
+  features.length > 0 && (
+    <div>
+      <h2>Features</h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 my-16">
+        {/* Left column */}
+        <div class="space-y-8">
+          {leftFeatures.map((f) => (
+            <div class="flex justify-between items-end">
+              <h6>{f.label}</h6>
+              <h3>{f.description?.toString()}</h3>
+            </div>
+          ))}
+        </div>
+
+        {/* Right column */}
+        <div class="space-y-8">
+          {rightFeatures.map((f) => (
+            <div class="flex justify-between items-end">
+              <h6>{f.label}</h6>
+              <h3>{f.description?.toString()}</h3>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}

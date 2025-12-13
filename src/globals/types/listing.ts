@@ -25,20 +25,36 @@ export interface SanityFile {
   };
 }
 
+export interface Location {
+  address: string; // full formatted address
+  streetAddress?: string; // "123 Main St"
+  neighborhood?: string;
+  city: string;
+  zipCode: string;
+  county: string;
+  state: string;
+  latitude: number;
+  longitude: number;
+}
+
 export interface ListingPreview {
-  _id: string; // Sanity documents always use this
+  _id: string;
   slug: string;
   title: string;
-  address: string;
 
-  // Optional property features
+  // nested location object
+  location: LocationPreview;
+
+  address?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+
   sqFt?: number | null;
   sqFtLand?: number | null;
   sqFtLot?: number | null;
   bedCount?: number | null;
   bathroomCount?: number | null;
 
-  // image (raw)
   coverImage: SanityImage;
 
   price?: number | null;
@@ -52,9 +68,6 @@ export interface ListingPreview {
     | "yearly"
     | null;
 
-  latitude?: number | null;
-  longitude?: number | null;
-
   updatedAt: string;
 
   agents?: Teammate[]; // resolved references
@@ -66,22 +79,14 @@ export interface Listing {
   _type: "listing";
   slug: string;
   title: string;
-  address: string;
+  location: Location;
   listingType?: ListingType;
-  streetAddress?: string;
-  neighborhood?: string;
-  city: string;
-  zipCode: string;
-  county: string;
-  state: string;
-  latitude: number;
-  longitude: number;
   isPriceNegotiable: boolean;
   price?: number | null;
   rentalPrice?: number | null;
   paymentFrequency?: PaymentFrequency;
   agents?: Teammate[];
-  listingFlyer?: SanityFile;
+  listingFlyer?: Flyer;
   zillowLink?: string;
   virtualTourLink?: string;
   coverImage: SanityImage;
@@ -116,6 +121,13 @@ export interface Listing {
   updatedAt?: string;
 }
 
+export interface Flyer {
+  _type: "file";
+  url: string;
+  mimeType?: string;
+  originalFilename?: string;
+}
+
 export interface GoogleMapPin {
   name: string;
   coords: MapCoords;
@@ -129,4 +141,12 @@ export enum SortListingsEnum {
   NEWEST = "newest",
   LEAST_EXPENSIVE = "leastExpensive",
   MOST_EXPENSIVE = "mostExpensive",
+}
+
+export interface LocationPreview {
+  address: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  city?: string | null;
+  state?: string | null;
 }

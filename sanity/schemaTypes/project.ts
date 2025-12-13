@@ -1,5 +1,6 @@
 // /schemas/project.ts
 import {defineType, defineField} from 'sanity'
+import {AddressInput} from '../components/AddressInput'
 
 export default defineType({
   name: 'project',
@@ -25,18 +26,26 @@ export default defineType({
       group: 'overview',
       validation: (Rule) => Rule.required(),
     }),
-
     defineField({
-      name: 'address',
-      title: 'Property Address',
-      type: 'string',
+      name: 'location',
+      title: 'Location',
+      type: 'object',
       group: 'overview',
-      validation: (Rule) => Rule.required(),
-      // In Payload you used a custom address search component.
-      // In Sanity, you could add a custom input component here later.
-      // components: { input: CustomAddressInput },
+      components: {
+        input: AddressInput, // <-- your custom component
+      },
+      fields: [
+        {name: 'address', title: 'Full Address', type: 'string'},
+        {name: 'streetAddress', title: 'Street', type: 'string'},
+        {name: 'neighborhood', type: 'string'},
+        {name: 'city', type: 'string'},
+        {name: 'county', type: 'string'},
+        {name: 'state', type: 'string'},
+        {name: 'zipCode', type: 'string'},
+        {name: 'latitude', type: 'number'},
+        {name: 'longitude', type: 'number'},
+      ],
     }),
-
     defineField({
       name: 'description',
       title: 'Description',
@@ -44,30 +53,6 @@ export default defineType({
       group: 'overview',
       validation: (Rule) => Rule.required(),
     }),
-
-    defineField({
-      name: 'neighborhood',
-      title: 'Neighborhood',
-      type: 'string',
-      group: 'overview',
-    }),
-
-    defineField({
-      name: 'latitude',
-      title: 'Latitude',
-      type: 'number',
-      group: 'overview',
-      hidden: true, // matches admin.hidden: true
-    }),
-
-    defineField({
-      name: 'longitude',
-      title: 'Longitude',
-      type: 'number',
-      group: 'overview',
-      hidden: true,
-    }),
-
     // -------------------------
     // FEATURES
     // -------------------------

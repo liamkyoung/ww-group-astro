@@ -14,6 +14,7 @@ const ALL_TEAMMATE_PREVIEW_QUERY = `
     facebook,
     linkedin,
     strengths,
+    jobTitle,
     "slug": slug.current
   }
 `;

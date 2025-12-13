@@ -1,0 +1,70 @@
+---
+import SocialList from "./SocialList.astro"; // adjust if needed
+import { urlFor } from "@/lib/sanityImage"; // your Sanity image builder helper
+import type { Teammate } from "@/globals/types/teammate"; // or wherever Teammate lives
+import type { SanityImage } from "@/lib/schemas";
+
+export interface ListingCTAProps {
+  agent: Teammate;
+  address?: string;
+}
+
+const { agent } = Astro.props as ListingCTAProps;
+
+// Normalize socials
+const instagramHandle = agent.instagram
+  ? agent.instagram.replace(/^@/, "")
+  : null;
+const facebookHandle = agent.facebook ?? null;
+
+// Profile image (SanityImage → URL via urlFor)
+const profilePic = agent.profilePic as unknown as SanityImage | undefined;
+const profilePicUrl = profilePic
+  ? urlFor(profilePic).width(400).height(400).url()
+  : null;
+---
+
+<div class="bg-wwRed relative py-8">
+  <div class="global-margin-x grid lg:grid-cols-3 grid-cols-1">
+    <div class="lg:row-span-2 row-span-1">
+      <h2
+        class="text-white mb-8 text-center lg:text-left lg:whitespace-nowrap whitespace-normal"
+      >
+        Schedule a Tour With <br />
+        <span class="text-wwYellow">{agent.title}</span>
+      </h2>
+
+      <div>
+        <h4 class="text-white mb-4 text-center lg:text-left">Contact Info</h4>
+
+        <SocialList
+          email={agent.email}
+          phoneNumber={agent.phoneNumber}
+          instagram={instagramHandle
+            ? {
+                username: instagramHandle,
+                profileLink: `https://instagram.com/${instagramHandle}`,
+              }
+            : null}
+          facebook={facebookHandle
+            ? {
+                username: facebookHandle,
+                profileLink: `https://facebook.com/${facebookHandle}`,
+              }
+            : null}
+        />
+      </div>
+    </div>
+
+    {
+      profilePicUrl && (
+        <img
+          src={profilePicUrl}
+          alt={profilePic?.alt ?? agent.title ?? "Listing agent"}
+          class="absolute z-10 bottom-0 -right-16 xl:right-16 mr-24 size-80 hidden lg:block object-cover rounded-full"
+          loading="lazy"
+        />
+      )
+    }
+  </div>
+</div>

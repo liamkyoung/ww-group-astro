@@ -1,3 +1,4 @@
+import type { SanityImage } from "@/lib/schemas";
 import type { SanityReference } from "@sanity/client";
 
 export interface Project {
@@ -6,18 +7,46 @@ export interface Project {
   _createdAt?: string;
   _updatedAt?: string;
   title: string;
-  address: string;
   description: string;
-  neighborhood?: string;
-  latitude?: number;
-  longitude?: number;
+  location: ProjectLocation;
   price?: string;
   agents?: SanityReference[];
-  slider?: Project[];
+  slider?: ProjectSlide[];
   website?: string;
   instagram?: string;
   publishedAt?: string;
   slug: {
     current: string;
   };
+}
+
+export interface ProjectPreview {
+  _id: string;
+  title: string;
+  description: string;
+  location: ProjectLocation;
+  website?: string;
+  instagram?: string;
+  slider?: ProjectSlide[]; // ONLY FIRST IMAGE IF POSSIBLE
+  publishedAt?: string;
+  slug: {
+    current: string;
+  };
+}
+
+export interface ProjectSlide {
+  _key?: string; // Sanity array items usually have _key
+  image: SanityImage;
+}
+
+export interface ProjectLocation {
+  address?: string; // Full Address
+  streetAddress?: string; // Street
+  neighborhood?: string;
+  city?: string;
+  county?: string;
+  state?: string;
+  zipCode?: string;
+  latitude?: number;
+  longitude?: number;
 }

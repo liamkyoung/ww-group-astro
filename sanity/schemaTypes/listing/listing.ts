@@ -9,6 +9,8 @@ import {
   zoningType,
 } from './types'
 
+import {AddressInput} from '../../components/AddressInput'
+
 export default defineType({
   name: 'listing',
   title: 'Listing',
@@ -39,16 +41,6 @@ export default defineType({
 
   fields: [
     // If you want a slug, uncomment this:
-    defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
-      validation: (Rule) => Rule.required(),
-    }),
 
     //
     // === Overview tab ===
@@ -61,12 +53,24 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'address',
-      title: 'Property Address',
-      type: 'string',
+      name: 'location',
+      title: 'Location',
+      type: 'object',
       fieldset: 'overview',
-      validation: (Rule) => Rule.required(),
-      // You could later attach a custom input for address search here
+      components: {
+        input: AddressInput, // <-- your custom component
+      },
+      fields: [
+        {name: 'address', title: 'Full Address', type: 'string'},
+        {name: 'streetAddress', title: 'Street', type: 'string'},
+        {name: 'neighborhood', type: 'string'},
+        {name: 'city', type: 'string'},
+        {name: 'county', type: 'string'},
+        {name: 'state', type: 'string'},
+        {name: 'zipCode', type: 'string'},
+        {name: 'latitude', type: 'number'},
+        {name: 'longitude', type: 'number'},
+      ],
     }),
     defineField({
       name: 'listingType',
@@ -83,62 +87,7 @@ export default defineType({
         layout: 'radio',
       },
     }),
-    defineField({
-      name: 'streetAddress',
-      title: 'Street',
-      type: 'string',
-      fieldset: 'overview',
-      hidden: true, // populated programmatically / from map
-    }),
-    defineField({
-      name: 'neighborhood',
-      title: 'Neighborhood',
-      type: 'string',
-      fieldset: 'overview',
-      hidden: true,
-    }),
-    defineField({
-      name: 'city',
-      title: 'City',
-      type: 'string',
-      fieldset: 'overview',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'zipCode',
-      title: 'Zip Code',
-      type: 'string',
-      fieldset: 'overview',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'county',
-      title: 'County',
-      type: 'string',
-      fieldset: 'overview',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'state',
-      title: 'State',
-      type: 'string',
-      fieldset: 'overview',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'latitude',
-      title: 'Latitude',
-      type: 'number',
-      fieldset: 'overview',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'longitude',
-      title: 'Longitude',
-      type: 'number',
-      fieldset: 'overview',
-      validation: (Rule) => Rule.required(),
-    }),
+
     defineField({
       name: 'isPriceNegotiable',
       title: 'Is Price Negotiable?',
@@ -465,6 +414,16 @@ export default defineType({
       type: 'text',
       fieldset: 'additional',
       hidden: ({parent}) => parent?.hasParking !== true,
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
     }),
   ],
 })

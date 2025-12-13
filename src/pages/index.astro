@@ -11,6 +11,8 @@ import type { Service } from "@/components/Cards/ServiceCard.astro";
 import { sanityClient } from "@/lib/sanityClient";
 import { GET_HOME_PAGE_PROJECTS } from "@/lib/queries/projects";
 import ProjectGallery from "@/components/Gallery/ProjectGallery.astro";
+import { getAllListingPreviews } from "@/lib/queries/listings";
+import { ListingGallery } from "@/components/Gallery/ListingGallery";
 
 const facts: FactStat[] = [
   { factStat: "150+", factDescription: "Transactions closed" },
@@ -18,12 +20,6 @@ const facts: FactStat[] = [
   { factStat: "12", factDescription: "Years in Tampa Bay" },
   { factStat: "24/7", factDescription: "Support for our clients" },
 ];
-
-//   id?: string | number;
-//   title?: string;
-//   shortDescription?: string;
-//   slug?: string;
-//   image?: ServiceImg;
 
 const services: Service[] = [
   {
@@ -60,7 +56,9 @@ const services: Service[] = [
   },
 ];
 
+// TODO: Turn into API GET requests to be used inside of the components
 const projects = await sanityClient.fetch(GET_HOME_PAGE_PROJECTS);
+const listings = await getAllListingPreviews();
 ---
 
 <Default>
@@ -96,7 +94,7 @@ const projects = await sanityClient.fetch(GET_HOME_PAGE_PROJECTS);
 
   <ServiceGallery services={services} displayHeader="yes" />
   <ProjectGallery projects={projects} />
+  <ListingGallery listings={listings} client:load />
   <CompanyScroll client:load />
-  <!-- Current Listings -->
   <CTA />
 </Default>

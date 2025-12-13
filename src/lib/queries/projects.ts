@@ -1,7 +1,7 @@
 import type { SanityReference } from "@sanity/client";
 import type { SanityImage } from "../schemas";
 import { sanityClient } from "../sanityClient";
-import type { Project } from "@/globals/types/project";
+import type { Project, ProjectPreview } from "@/globals/types/project";
 
 export interface ProjectSliderItem {
   _key: string;
@@ -36,15 +36,21 @@ export async function getProjectsByTeammate(
   return sanityClient.fetch(query, { teammateId });
 }
 
-export async function getAllProjects(): Promise<Project[] | null> {
-  const query = `*[_type == "project"]
-        | order(publishedAt desc){
-        title,
-        address,
-        description,
-        instagram,
-        slug,
-        "image": slider[0].image
-    }`;
+export async function getAllProjects(): Promise<ProjectPreview[] | null> {
+  const query = `*[_type == "project"] 
+  | order(coalesce(publishedAt, _createdAt) desc) {
+    _id,
+    title,
+    description,
+    location,
+    website,
+    instagram,
+    "slider": slider[0...1]{
+      _key,
+      image
+    },
+    publishedAt,
+    slug
+  }`;
   return sanityClient.fetch(query);
 }

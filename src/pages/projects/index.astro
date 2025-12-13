@@ -1,0 +1,66 @@
+---
+import Default from "@/layouts/Default.astro";
+import type { ProjectPreview } from "@/components/Gallery/ProjectGallery.astro";
+import { getAllProjects } from "@/lib/queries/projects";
+import ProjectBlock, {
+  type ProjectLink,
+} from "@/components/Blocks/ProjectBlock.astro";
+import { urlFor } from "@/lib/sanityImage";
+import { ProjectHero } from "@/components/Hero/ProjectHero";
+import type { GoogleMapPin } from "@/globals/types/listing";
+import DefaultHero from "@/components/Hero/DefaultHero.astro";
+
+const projects = await getAllProjects();
+const pins: GoogleMapPin[] | undefined = projects?.map((p) => ({
+  name: p.title,
+  coords: {
+    lat: p.location.latitude as number,
+    lng: p.location.longitude as number,
+  },
+  slug: p.slug.current,
+  coverImg: p.slider ? p.slider[0].image : undefined,
+  address: p.location.address,
+}));
+---
+
+<Default>
+  {
+    pins ? (
+      <ProjectHero pins={pins} client:load />
+    ) : (
+      <DefaultHero header={"Featured Deals"} />
+    )
+  }
+
+  {
+    projects &&
+      projects.map((p, i) => {
+        let links: ProjectLink[] = [];
+        if (p.website)
+          links.push({
+            href: p.website,
+            label: "Visit Website",
+            appearance: "primary",
+          });
+        if (p.instagram)
+          links.push({
+            href: "https://instagram.com/" + p.instagram,
+            label: "Instagram",
+            appearance: "secondary",
+          });
+
+        return (
+          <ProjectBlock
+            title={p.title}
+            description={p.description}
+            subheading={p.location && p.location.address}
+            subheadingType="location"
+            imageSrc={p.slider ? urlFor(p.slider[0].image).url() : ""}
+            imagePosition={i % 2 == 0 ? "left" : "right"}
+            colorScheme={i % 2 == 0 ? "red" : "default"}
+            links={links}
+          />
+        );
+      })
+  }
+</Default>

@@ -9,7 +9,7 @@ import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://wittnerwollman.com",
+  site: "https://ww-group-astro.vercel.app",
   integrations: [mdx(), sitemap(), react()],
   vite: {
     plugins: [tailwindcss()],

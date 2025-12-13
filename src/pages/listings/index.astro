@@ -3,6 +3,8 @@ import Default from "@/layouts/Default.astro";
 import { getAllListingPreviews } from "@/lib/queries/listings";
 import { ListingGallery } from "@/components/Gallery/ListingGallery";
 
+export const prerender = false;
+
 const listings = await getAllListingPreviews();
 ---
 

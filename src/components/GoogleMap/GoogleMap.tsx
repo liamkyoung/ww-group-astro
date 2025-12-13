@@ -8,7 +8,7 @@ import { GoogleMapsDefaults } from "@/globals/general";
 
 export type Props = {
   pins?: GoogleMapPin[];
-  fullscreen?: Boolean;
+  fullscreen?: boolean;
   zoom?: "close" | "default" | "far";
   pinType?: "listing" | "project";
 };

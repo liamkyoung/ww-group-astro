@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-implicit-any-catch */
- 
+
 import DOMPurify from "isomorphic-dompurify";
 import { z } from "zod";
 

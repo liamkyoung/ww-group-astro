@@ -10,6 +10,8 @@ import type { GoogleMapPin } from "@/globals/types/listing";
 import DefaultHero from "@/components/Hero/DefaultHero.astro";
 import { instagramHandleToUrl } from "@/lib/instgramHandleToURL";
 
+export const prerender = false;
+
 const projects = await getAllProjects();
 const pins: GoogleMapPin[] | undefined = projects?.map((p) => ({
   name: p.title,

@@ -1,0 +1,22 @@
+---
+import TeammateGallery from "@/components/Gallery/TeammateGallery.astro";
+import FullscreenHero from "@/components/Hero/FullscreenHero.astro";
+import Default from "@/layouts/Default.astro";
+import { getAllTeammates } from "@/lib/queries/teammate";
+
+export const prerender = false;
+const teammates = await getAllTeammates();
+---
+
+<Default>
+  <FullscreenHero
+    headerText="MEET THE WITTNER WOLLMAN GROUP"
+    bodyText={[
+      "The Wittner Wollman Group was founded on a commitment to growth, collaboration, and community. Co-founded by Jon Wittner - a real estate veteran with 35+ years of experience in the Tampa Bay area - and Jake Wollman - a commercial powerhouse with over a decade of success - our group offers unparalleled industry insight. Our goal is to foster a culture of growth and excellence that extends to the clients we serve. We understand that every client has unique goals, whether they are buying their first home, investing in commercial properties, enhancing their development portfolio, or leasing a prime retail space. Our team goes above and beyond to provide personalized service, leveraging deep market knowledge and innovative strategies to deliver exceptional results. From guiding clients through complex transactions to identifying opportunities for growth, we prioritize building lasting relationships and creating value every step of the way.",
+      "Our mission for our agents is to build a thriving environment where team members are empowered to excel both personally and professionally. We are passionate about turning talented professionals into industry leaders, and we know that success knows no limits. Through intentional mentorship, meaningful support, and a team-first culture, we inspire every agent to achieve their fullest potential. Our goal is for all our agents to become secure with an active pipeline by their second year, and we invest the time, guidance, and resources needed to make that goal a reality. We are selective in recruiting individuals who not only understand our market and the opportunities within it but are also committed to embracing and contributing to the vibrant culture of St. Pete and Tampa Bay.",
+      "Success for us is not just about closing deals—it's about making a meaningful impact. Our agents are deeply connected to the communities we serve, with leadership roles in nonprofits like Take Mar, contributions to local culture through the St. Pete Arts Alliance board, and support for the community’s real estate future as CCIM scholars. By strengthening the neighborhoods we call home throughout St. Pete and the greater Tampa Bay region, we’re committed to shaping a brighter future for both our clients and our community.",
+    ]}
+    backupImageUrl="/src/assets/images/team-portrait-img.webp"
+  />
+  <TeammateGallery teammates={teammates} />
+</Default>

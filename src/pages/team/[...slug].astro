@@ -1,10 +1,7 @@
 ---
 import Default from "@/layouts/Default.astro";
 import { getAllTeammateSlugs, getTeammateBySlug } from "@/lib/queries/teammate";
-import type { Teammate } from "@/globals/types/teammate"; // adjust path as needed
-import SocialIcon from "@/components/SocialIcon.astro";
 import { portableTextToHtml } from "@/lib/portableText";
-import { urlFor } from "@/lib/sanityImage";
 import TeammateHero from "@/components/Hero/TeammateHero.astro";
 import ContactAndBio from "@/components/ContactAndBio.astro";
 import { getProjectsByTeammateSlug } from "@/lib/queries/projects";
@@ -13,6 +10,8 @@ import CommunityResourceGallery from "@/components/Gallery/CommunityResourceGall
 import { getCommunityResourcesByTeammateSlug } from "@/lib/queries/communityResources";
 import { getListingPreviewsByAgentSlug } from "@/lib/queries/listings";
 import { ListingGallery } from "@/components/Gallery/ListingGallery";
+
+export const prerender = false;
 
 // Build all static paths at build-time
 export async function getStaticPaths() {

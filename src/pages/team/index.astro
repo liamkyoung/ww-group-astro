@@ -4,21 +4,10 @@ import FullscreenHero from "@/components/Hero/FullscreenHero.astro";
 import Default from "@/layouts/Default.astro";
 import { getAllTeammates } from "@/lib/queries/teammate";
 
+export const prerender = false;
 const teammates = await getAllTeammates();
 ---
 
-<!-- interface Props {
-  headerText: string;
-  bodyText?: string; // plain string instead of RichText
-  links?: HeroLink[];
-
-  // Media
-  videoUrl?: string; // main hero background (desktop)
-  backupImageUrl?: string; // backup image for mobile / when no video
-
-  centeredText?: boolean;
-  gradient?: "none" | "red" | "black";
-} -->
 <Default>
   <FullscreenHero
     headerText="MEET THE WITTNER WOLLMAN GROUP"

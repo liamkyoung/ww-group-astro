@@ -1,5 +1,5 @@
 ---
-import type { GoogleMapPin, Listing } from "@/globals/types/listing"; // adjust path to where you defined Listing
+import type { Listing } from "@/globals/types/listing"; // adjust path to where you defined Listing
 import { sanityClient } from "@/lib/sanityClient";
 import {
   LISTING_BY_SLUG_QUERY,
@@ -15,6 +15,8 @@ import CTA from "@/components/CTA.astro";
 import { toHTML } from "@portabletext/to-html";
 import ProjectBlock from "@/components/Blocks/ProjectBlock.astro";
 import { urlFor } from "@/lib/sanityImage";
+
+export const prerender = false;
 
 // Type of data returned by LISTING_SLUGS_QUERY
 type ListingSlugDoc = { slug: string };

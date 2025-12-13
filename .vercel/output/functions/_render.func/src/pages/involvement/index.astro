@@ -1,0 +1,42 @@
+---
+import { sanityClient } from "@/lib/sanityClient";
+import Default from "@/layouts/Default.astro";
+import DefaultHero from "@/components/Hero/DefaultHero.astro";
+import HeroImg from "@/assets/hero/Community_Resources_Header.webp";
+import { INVOLVEMENT_QUERY } from "@/lib/queries/involvement";
+import { type Involvement } from "@/globals/types/involvement";
+import InvolvementCard from "@/components/Cards/InvolvementCard.astro";
+
+export const prerender = false;
+
+const involvement = await sanityClient.fetch(INVOLVEMENT_QUERY);
+---
+
+<Default>
+  <DefaultHero
+    header={"Making a BOLD Impact In Our Community"}
+    body={[
+      "Our team members are heavily involved in Tampa Bay throughout a variety of organizations spanning the arts, the environment, sports and more.",
+    ]}
+    imageSrc={HeroImg.src}
+  />
+  <div class="my-24">
+    <div class="w-full h-full mt-16">
+      <div class="global-margin-x space-y-16">
+        {
+          involvement.length > 0 ? (
+            <div class="grid sm:grid-cols-2 xl:grid-cols-4 lg:place-items-start place-items-center gap-16">
+              {involvement.map((g: Involvement) => (
+                <InvolvementCard doc={g} />
+              ))}
+            </div>
+          ) : (
+            <p class="text-center font-semibold my-12">
+              There are currently no involvement groups to display.
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</Default>

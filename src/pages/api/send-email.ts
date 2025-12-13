@@ -5,7 +5,6 @@ import { EmailTemplate } from "@/globals/emailTemplates/basicEmail";
 import {
   checkRateLimit,
   emailSchema,
-  getClientIP,
   RATE_LIMITS,
   validateAndSanitize,
 } from "@/lib/validation";
@@ -67,7 +66,7 @@ export const POST: APIRoute = async ({ request }) => {
     from: import.meta.env.SENDING_EMAIL, // rename your envs to NON-PUBLIC
     to: email,
     subject,
-    react: EmailTemplate({
+    react: await EmailTemplate({
       firstName,
       lastName,
       phoneNumber,

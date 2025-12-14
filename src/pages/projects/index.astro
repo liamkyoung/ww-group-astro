@@ -9,6 +9,7 @@ import { ProjectHero } from "@/components/Hero/ProjectHero";
 import type { GoogleMapPin } from "@/globals/types/listing";
 import DefaultHero from "@/components/Hero/DefaultHero.astro";
 import { instagramHandleToUrl } from "@/lib/instgramHandleToURL";
+import { PROJECT_PAGE_METADATA } from "@/globals/metadata";
 
 export const prerender = false;
 
@@ -25,7 +26,7 @@ const pins: GoogleMapPin[] | undefined = projects?.map((p) => ({
 }));
 ---
 
-<Default>
+<Default {...PROJECT_PAGE_METADATA}>
   {
     pins ? (
       <ProjectHero pins={pins} client:load />

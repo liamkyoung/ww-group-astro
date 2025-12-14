@@ -18,6 +18,7 @@ import consultingHero from "@/assets/services/consulting-service-hero.webp";
 import acquisitionHero from "@/assets/services/acquisition-service-hero.webp";
 import salesHero from "@/assets/services/sales-service-hero.webp";
 import teamImg from "@/assets/images/team-portrait-img.webp";
+import { HOME_PAGE_METADATA } from "@/globals/metadata";
 
 const facts: FactStat[] = [
   { factStat: "150+", factDescription: "Transactions closed" },
@@ -66,7 +67,7 @@ const projects = await sanityClient.fetch(GET_HOME_PAGE_PROJECTS);
 const listings = await getAllListingPreviews();
 ---
 
-<Default>
+<Default {...HOME_PAGE_METADATA}>
   <FullscreenHero
     headerText="WITTNER WOLLMAN GROUP: TRANSFORMING THE FUTURE OF ST. PETE & TAMPA BAY"
     bodyText={[

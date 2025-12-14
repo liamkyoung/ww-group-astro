@@ -68,7 +68,7 @@ const formattedPrice =
 const htmlDesc = toHTML(listing.fullDescription);
 ---
 
-<Default>
+<Default title={listing.title} description={listing.overviewText}>
   <div class="global-margin-x mt-24 space-y-24">
     <ListingHero
       streetAddress={listing.location.streetAddress ??

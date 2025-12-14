@@ -6,13 +6,14 @@ import HeroImg from "@/assets/hero/Community_Resources_Header.webp";
 import { INVOLVEMENT_QUERY } from "@/lib/queries/involvement";
 import { type Involvement } from "@/globals/types/involvement";
 import InvolvementCard from "@/components/Cards/InvolvementCard.astro";
+import { INVOLVEMENT_PAGE_METADATA } from "@/globals/metadata";
 
 export const prerender = false;
 
 const involvement = await sanityClient.fetch(INVOLVEMENT_QUERY);
 ---
 
-<Default>
+<Default {...INVOLVEMENT_PAGE_METADATA}>
   <DefaultHero
     header={"Making a BOLD Impact In Our Community"}
     body={[

@@ -2,10 +2,11 @@
 import SocialList from "@/components/SocialList.astro";
 import { ContactForm } from "@/components/inputs/ContactForm";
 import Default from "@/layouts/Default.astro";
+import { CONTACT_PAGE_METADATA } from "@/globals/metadata";
 export const prerender = false;
 ---
 
-<Default>
+<Default {...CONTACT_PAGE_METADATA}>
   <div class="global-margin-x my-24 overflow-hidden">
     <div class="mb-16">
       <h1>Send Us A Message!</h1>

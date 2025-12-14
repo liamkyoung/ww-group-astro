@@ -4,12 +4,13 @@ import FullscreenHero from "@/components/Hero/FullscreenHero.astro";
 import Default from "@/layouts/Default.astro";
 import { getAllTeammates } from "@/lib/queries/teammate";
 import HeroImg from "@/assets/images/team-portrait-img.webp";
+import { TEAM_PAGE_METADATA } from "@/globals/metadata";
 
 export const prerender = false;
 const teammates = await getAllTeammates();
 ---
 
-<Default>
+<Default {...TEAM_PAGE_METADATA}>
   <FullscreenHero
     headerText="MEET THE WITTNER WOLLMAN GROUP"
     bodyText={[

@@ -3,6 +3,7 @@ import { getAllPosts } from "../../lib/queries/posts";
 import { urlFor } from "../../lib/sanityImage";
 import Default from "@/layouts/Default.astro";
 import CTA from "@/components/CTA.astro";
+import { NEWS_PAGE_METADATA } from "@/globals/metadata";
 
 export const prerender = false;
 
@@ -20,7 +21,7 @@ const latest = posts.slice(3);
 const getSlug = (slug: string) => `/news/${slug}`;
 ---
 
-<Default>
+<Default {...NEWS_PAGE_METADATA}>
   <section class="blog-page">
     <!-- HERO SECTION -->
     <div class="hero-grid">

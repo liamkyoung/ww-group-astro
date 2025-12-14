@@ -3,9 +3,10 @@ import CTA from "@/components/CTA.astro";
 import DefaultHero from "@/components/Hero/DefaultHero.astro";
 import Default from "@/layouts/Default.astro";
 import HeroImg from "@/assets/services/consulting-service-hero.webp";
+import { CONSULTING_SERVICE_PAGE_METADATA } from "@/globals/metadata";
 ---
 
-<Default>
+<Default {...CONSULTING_SERVICE_PAGE_METADATA}>
   <DefaultHero
     header="Consulting Service"
     imageSrc={HeroImg.src}

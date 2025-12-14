@@ -78,7 +78,7 @@ export function ContactForm({ colorScheme = ColorScheme.DEFAULT }: Props) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     try {
-      const response = await fetch(`${SERVER_URL}/api/send-email`, {
+      const response = await fetch(`${SERVER_URL}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

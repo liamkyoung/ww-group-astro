@@ -1,0 +1,105 @@
+---
+import Default from "@/layouts/Default.astro";
+import CTA from "@/components/CTA.astro";
+import FullscreenHero from "@/components/Hero/FullscreenHero.astro";
+import StatBlock, { type FactStat } from "@/components/Blocks/StatBlock.astro";
+import ProjectBlock from "@/components/Blocks/ProjectBlock.astro";
+import CompanyScroll from "@/components/Blocks/Company/CompanyScroll";
+import ServiceGallery from "@/components/Blocks/ServiceBlock.astro";
+import type { Service } from "@/components/Cards/ServiceCard.astro";
+import { sanityClient } from "@/lib/sanityClient";
+import { GET_HOME_PAGE_PROJECTS } from "@/lib/queries/projects";
+import ProjectGallery from "@/components/Gallery/ProjectGallery.astro";
+import { getAllListingPreviews } from "@/lib/queries/listings";
+import { ListingGallery } from "@/components/Gallery/ListingGallery";
+import backupImg from "@/assets/images/reflection-eagle-pov.webp";
+import leasingHero from "@/assets/services/leasing-service-hero.webp";
+import consultingHero from "@/assets/services/consulting-service-hero.webp";
+import acquisitionHero from "@/assets/services/acquisition-service-hero.webp";
+import salesHero from "@/assets/services/sales-service-hero.webp";
+import teamImg from "@/assets/images/team-portrait-img.webp";
+
+const facts: FactStat[] = [
+  { factStat: "150+", factDescription: "Transactions closed" },
+  { factStat: "98%", factDescription: "Client satisfaction rate" },
+  { factStat: "12", factDescription: "Years in Tampa Bay" },
+  { factStat: "24/7", factDescription: "Support for our clients" },
+];
+
+export const services: Service[] = [
+  {
+    title: "Leasing",
+    slug: "leasing",
+    image: {
+      imageUrl: leasingHero,
+      alt: "Leasing Service",
+    },
+  },
+  {
+    title: "Consulting",
+    slug: "consulting",
+    image: {
+      imageUrl: consultingHero,
+      alt: "Consulting Service",
+    },
+  },
+  {
+    title: "Acquisition",
+    slug: "acquisition",
+    image: {
+      imageUrl: acquisitionHero,
+      alt: "Acquisition Service",
+    },
+  },
+  {
+    title: "Sales",
+    slug: "sales",
+    image: {
+      imageUrl: salesHero,
+      alt: "Sales Service",
+    },
+  },
+];
+
+// TODO: Turn into API GET requests to be used inside of the components
+const projects = await sanityClient.fetch(GET_HOME_PAGE_PROJECTS);
+const listings = await getAllListingPreviews();
+---
+
+<Default>
+  <FullscreenHero
+    headerText="WITTNER WOLLMAN GROUP: TRANSFORMING THE FUTURE OF ST. PETE & TAMPA BAY"
+    bodyText={[
+      "Our team of stellar commercial and residential agents have a talent for envisioning the future of our town. Partner with us to make your mark.",
+    ]}
+    videoUrl="https://ww-group.nyc3.cdn.digitaloceanspaces.com/website_vid.mp4"
+    backupImageUrl={backupImg.src}
+    centeredText={false}
+    gradient="black"
+    links={[
+      { href: "/team", label: "MEET THE TEAM", appearance: "primary" },
+      {
+        href: "/listings",
+        label: "VIEW LISTINGS",
+        appearance: "secondary",
+      },
+    ]}
+  />
+
+  <StatBlock id="stats" title="By the Numbers" facts={facts} />
+  <ProjectBlock
+    title="SHAPING THE URBAN LANDSCAPE & COMMUNITY"
+    description="Our team has exceptional talent and experience in commercial real estate, development services, and luxury residential real estate."
+    imageSrc={teamImg.src}
+    imageAlt={"team image"}
+    imagePosition={"right"}
+    colorScheme={"red"}
+    links={[{ href: "/team", label: "MEET THE TEAM", appearance: "secondary" }]}
+  />
+
+  <ServiceGallery services={services} displayHeader="yes" />
+  <ProjectGallery projects={projects} />
+  <ListingGallery listings={listings} client:load />
+  <CompanyScroll client:load />
+  <CTA />
+</Default>

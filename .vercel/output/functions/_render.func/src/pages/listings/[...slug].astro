@@ -1,0 +1,154 @@
+---
+import type { Listing } from "@/globals/types/listing"; // adjust path to where you defined Listing
+import { sanityClient } from "@/lib/sanityClient";
+import {
+  LISTING_BY_SLUG_QUERY,
+  LISTING_SLUGS_QUERY,
+} from "@/lib/queries/listings";
+import ListingHero from "@/components/Hero/ListingHero.astro";
+import Default from "@/layouts/Default.astro";
+import PhotoGallery from "@/components/PhotoGallery.astro";
+import Features from "@/components/Features.astro";
+import { GoogleMap } from "@/components/GoogleMap/GoogleMap";
+import ListingCTA from "@/components/ListingCTA.astro";
+import CTA from "@/components/CTA.astro";
+import { toHTML } from "@portabletext/to-html";
+import ProjectBlock from "@/components/Blocks/ProjectBlock.astro";
+import { urlFor } from "@/lib/sanityImage";
+
+export const prerender = false;
+
+// Type of data returned by LISTING_SLUGS_QUERY
+type ListingSlugDoc = { slug: string };
+
+interface Props {
+  listing: Listing | null;
+}
+
+export async function getStaticPaths() {
+  // 1) Fetch all slugs
+  const slugDocs =
+    await sanityClient.fetch<ListingSlugDoc[]>(LISTING_SLUGS_QUERY);
+
+  // 2) For each slug, fetch its full listing data
+  const paths = await Promise.all(
+    slugDocs.map(async ({ slug }) => {
+      const listing = await sanityClient.fetch<Listing | null>(
+        LISTING_BY_SLUG_QUERY,
+        { slug },
+      );
+
+      return {
+        params: { slug },
+        props: { listing },
+      };
+    }),
+  );
+
+  return paths;
+}
+
+const { listing } = Astro.props as Props;
+
+if (!listing) {
+  throw new Error("Listing not found");
+} else if (!listing.location) {
+  throw new Error(`Listing not found ${listing.title}`);
+}
+
+const formattedPrice =
+  typeof listing.price === "number"
+    ? new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(listing.price)
+    : null;
+
+const htmlDesc = toHTML(listing.fullDescription);
+---
+
+<Default>
+  <div class="global-margin-x mt-24 space-y-24">
+    <ListingHero
+      streetAddress={listing.location.streetAddress ??
+        listing.location.streetAddress ??
+        listing.title}
+      city={listing.location.city ?? listing.location.city}
+      state={listing.location.state ?? listing.location.state}
+      zipCode={listing.location.zipCode ?? listing.location.zipCode}
+      sqFt={listing.sqFt ?? 0}
+      sqFtLand={listing.sqFtLand ?? 0}
+      sqFtLot={listing.sqFtLot ?? 0}
+      propertyType={listing.propertyTypes as any}
+      isPriceNegotiable={listing.isPriceNegotiable}
+      price={listing.price ?? 0}
+      rentalPrice={listing.rentalPrice ?? 0}
+      flyer={listing.listingFlyer}
+      zillowLink={listing.zillowLink ?? ""}
+      virtualTourLink={listing.virtualTourLink}
+    />
+    <PhotoGallery imageGallery={listing.imageGallery ?? []} />
+
+    <ProjectBlock
+      title={listing.title}
+      subheading={listing.location.streetAddress}
+      subheadingType={"location"}
+      imageSrc={urlFor(listing.coverImage).url()}
+      colorScheme="red"
+      description={listing.overviewText}
+    />
+
+    <div class="space-y-8 mb-24">
+      <h2>Property Description</h2>
+      <div set:html={htmlDesc} />
+    </div>
+
+    <Features
+      bedrooms={listing.bedCount}
+      bathrooms={listing.bathroomCount}
+      sqFt={listing.sqFt}
+      yearBuilt={listing.yearBuilt}
+      yearRenovated={listing.yearRenovated}
+      propertyType={listing.propertyTypes}
+      isPriceNegotiable={listing.isPriceNegotiable}
+      price={listing.price}
+      sqFtLand={listing.sqFtLand}
+      status={undefined /* plug in if you have it */}
+      occupancy={listing.occupancy}
+      area={listing.areaOverview}
+      zipCode={listing.location.zipCode ?? listing.location.zipCode}
+      zoningType={listing.zoningType}
+      cool={listing.cool}
+      heat={listing.heat}
+      lighting={listing.lighting}
+      electricity={listing.electricity}
+      water={listing.water}
+      waste={listing.waste}
+      sewer={listing.sewer}
+      internet={listing.internet}
+      hasParking={listing.hasParking}
+      parkingDescription={listing.parkingDescription}
+      buildingClass={listing.buildingClass}
+      sqFtLot={listing.sqFtLot}
+    />
+  </div>
+  <GoogleMap
+    fullscreen
+    pins={[
+      {
+        name: "",
+        coords: {
+          lat: listing.location.latitude,
+          lng: listing.location.longitude,
+        },
+        slug: listing.slug,
+        coverImg: listing.coverImage,
+        address: listing.location.streetAddress,
+        price: listing.price || 0,
+      },
+    ]}
+    client:load
+  />
+  {listing.agents ? <ListingCTA agent={listing.agents[0]} /> : <CTA />}
+</Default>

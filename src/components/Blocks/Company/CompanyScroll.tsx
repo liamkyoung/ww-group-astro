@@ -6,7 +6,7 @@ import clearPHLogo from "src/assets/logos/clear-ph-logo.png";
 import datzLogo from "src/assets/logos/datz-logo.png";
 import evergladesLogo from "src/assets/logos/everglades-university-logo.png";
 import feldmansLogo from "src/assets/logos/feldmans-equities-logo.png";
-import fulmerLeroyLogo from "src/assets/logos/fulmer-leroy-albee-logo.webp";
+import fulmerLeroyLogo from "src/assets/logos/Fulmer-LeRoy-Albee-logo.webp";
 import goodIntentionsLogo from "src/assets/logos/good-intentions-logo.png";
 import hpCapitalLogo from "src/assets/logos/hp-capital-group-logo.png";
 import intermezzoLogo from "src/assets/logos/intermezzo-logo.png";

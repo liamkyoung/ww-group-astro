@@ -1,0 +1,21 @@
+---
+import { ALL_COMMUNITY_RESOURCES_QUERY } from "@/lib/queries/communityResources";
+import { sanityClient } from "@/lib/sanityClient";
+import CommunityResourceGallery from "@/components/Gallery/CommunityResourceGallery.astro";
+import Default from "@/layouts/Default.astro";
+import DefaultHero from "@/components/Hero/DefaultHero.astro";
+import HeroImg from "@/assets/hero/Community_Resources_Header.webp";
+
+export const prerender = false;
+
+const resources = await sanityClient.fetch(ALL_COMMUNITY_RESOURCES_QUERY);
+---
+
+<Default>
+  <DefaultHero
+    header={"Community Resources"}
+    body={[]}
+    imageSrc={HeroImg.src}
+  />
+  <CommunityResourceGallery communityResources={resources} />
+</Default>

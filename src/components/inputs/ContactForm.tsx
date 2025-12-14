@@ -71,13 +71,14 @@ export function ContactForm({ colorScheme = ColorScheme.DEFAULT }: Props) {
 
   const [sending, setSending] = useState<boolean>(false);
 
+  const SERVER_URL = import.meta.env.PUBLIC_DO_EMAIL_URL;
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<ContactEmailProps>) {
     setSending(true);
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     try {
-      const response = await fetch("/api/send-email", {
+      const response = await fetch(`${SERVER_URL}/api/send-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

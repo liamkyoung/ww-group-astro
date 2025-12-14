@@ -66,13 +66,14 @@ export const POST: APIRoute = async ({ request }) => {
     from: import.meta.env.SENDING_EMAIL, // rename your envs to NON-PUBLIC
     to: email,
     subject,
-    react: EmailTemplate({
-      firstName,
-      lastName,
-      phoneNumber,
-      email,
-      message,
-    }),
+    html: `<html>
+    <body>
+      <h1>New message from ${firstName} ${lastName}</h1>
+      <p>Email: ${email}</p>
+      <p>Phone: ${phoneNumber ?? "N/A"}</p>
+      <p>${message}</p>
+    </body>
+  </html>`,
   });
 
   if (error) {

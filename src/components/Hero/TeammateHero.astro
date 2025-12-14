@@ -42,7 +42,7 @@ const imageUrl = fullBodyImage
             src={imageUrl}
             alt={name}
             class="w-full max-w-96 object-contain mx-auto shadow-md"
-            loading="lazy"
+            loading="eager"
           />
         )
       }
@@ -80,8 +80,8 @@ const imageUrl = fullBodyImage
         <img
           src={imageUrl}
           alt={name}
-          class="xl:min-w-96 max-w-[20rem] shadow-md object-contain"
-          loading="lazy"
+          class="xl:min-w-96 max-w-[20rem] shadow-md object-contain min-h-96"
+          loading="eager"
         />
       )
     }

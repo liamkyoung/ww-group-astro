@@ -100,7 +100,7 @@ const listings = await getAllListingPreviews();
 
   <ServiceGallery services={services} displayHeader="yes" />
   <ProjectGallery projects={projects} />
-  <ListingGallery listings={listings} client:load />
-  <CompanyScroll client:load />
+  <ListingGallery listings={listings} client:visible />
+  <CompanyScroll client:visible />
   <CTA />
 </Default>

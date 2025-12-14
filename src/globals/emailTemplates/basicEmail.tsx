@@ -9,9 +9,6 @@ interface EmailTemplateProps {
   email: string;
 }
 
-import { Html, Head, Img } from "@react-email/components";
-import { Tailwind } from "@react-email/tailwind";
-
 export function EmailTemplate({
   firstName,
   lastName,

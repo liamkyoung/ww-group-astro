@@ -2,12 +2,13 @@
 import CTA from "@/components/CTA.astro";
 import DefaultHero from "@/components/Hero/DefaultHero.astro";
 import Default from "@/layouts/Default.astro";
+import HeroImg from "@/assets/services/consulting-service-hero.webp";
 ---
 
 <Default>
   <DefaultHero
     header="Consulting Service"
-    imageSrc="/src/assets/services/consulting-service-hero.webp"
+    imageSrc={HeroImg.src}
     body={[
       "Our acquisitions services focus on matching developers with properties that align with their vision for growth, development, or assemblage. We specialize in identifying opportunities that support innovative projects, whether facilitating transitions for business growth or downsizing, or repurposing properties for adaptive reuse.",
       "With expertise in navigating complex acquisitions, we've successfully guided projects like the assemblage of the Dr. BBQ property by PTM, which paved the way for a transformative 22-story tower. By leveraging market insights and fostering collaborative relationships, we ensure acquisitions are tailored to meet both immediate goals and long-term value creation.",

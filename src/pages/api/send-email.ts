@@ -66,7 +66,7 @@ export const POST: APIRoute = async ({ request }) => {
     from: import.meta.env.SENDING_EMAIL, // rename your envs to NON-PUBLIC
     to: email,
     subject,
-    react: await EmailTemplate({
+    react: EmailTemplate({
       firstName,
       lastName,
       phoneNumber,

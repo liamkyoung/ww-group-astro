@@ -111,7 +111,7 @@ const gradientColor = getGradientColor(gradient);
           src={backupImageUrl}
           alt={headerText}
           class="sm:w-full sm:h-screen lg:h-auto object-cover hidden sm:block"
-          loading="lazy"
+          fetchpriority="high"
         />
       ) : (
         <div class="hidden sm:block sm:w-full sm:h-screen lg:h-auto bg-wwBlack" />
@@ -125,7 +125,7 @@ const gradientColor = getGradientColor(gradient);
           src={backupImageUrl}
           alt={headerText}
           class="w-full h-96 object-cover sm:hidden block"
-          loading="lazy"
+          fetchpriority="high"
         />
       ) : (
         <div class="w-full h-96 bg-wwBlack sm:hidden block" />

@@ -53,6 +53,15 @@ export default defineType({
       group: 'overview',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'rank',
+      title: 'Order in List',
+      type: 'number',
+      group: 'overview',
+      validation: (Rule) =>
+        Rule.required().integer().min(1).error('Rank must be a non-negative integer'),
+    }),
+
     // -------------------------
     // FEATURES
     // -------------------------
@@ -81,7 +90,7 @@ export default defineType({
       title: 'Image Slider',
       type: 'array',
       group: 'features',
-      validation: (Rule) => Rule.min(2).max(10),
+      validation: (Rule) => Rule.min(1).max(10),
       of: [
         defineField({
           name: 'slide',

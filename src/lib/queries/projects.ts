@@ -13,7 +13,7 @@ export interface ProjectSliderItem {
 }
 
 export const GET_HOME_PAGE_PROJECTS = `*[_type == "project" && defined(publishedAt)]
-| order(publishedAt desc)[0...4]{
+| order(rank asc)[0...4]{
   title,
   "image": slider[0].image,
 }`;
@@ -42,7 +42,7 @@ export async function getProjectsByTeammateSlug(
 
 export async function getAllProjects(): Promise<ProjectPreview[] | null> {
   const query = `*[_type == "project"] 
-  | order(coalesce(publishedAt, _createdAt) desc) {
+  | order(rank asc) {
     _id,
     title,
     description,

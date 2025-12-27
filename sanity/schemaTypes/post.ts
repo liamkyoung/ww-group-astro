@@ -17,7 +17,13 @@ export default defineType({
       options: {
         source: 'title',
         maxLength: 96,
+        slugify: (input) =>
+          input
+            .toLowerCase()
+            .replace(/[^a-z0-9 -]/g, '')
+            .slice(0, 200),
       },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'description',

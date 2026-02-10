@@ -49,7 +49,7 @@ export const ListingFilter: React.FC<Props> = ({
     <div className="mb-6 border-t border-gray-200 py-4">
       <div className="flex flex-col gap-4 items-start sm:flex-row sm:items-center sm:justify-between">
         {/* Sort */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2">
           <span className="text-sm font-medium text-gray-700">Sort by:</span>
           <select
             className="text-sm rounded-md border border-gray-300 bg-white px-2 py-1 focus:border-wwRed focus:outline-none focus:ring-1 focus:ring-wwRed"

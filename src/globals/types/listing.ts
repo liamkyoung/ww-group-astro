@@ -15,7 +15,8 @@ export type PaymentFrequency =
   | "oneTime"
   | "dollarPerSqPerYear"
   | "monthly"
-  | "yearly";
+  | "yearly"
+  | null;
 
 export interface SanityFile {
   _type: "file";
@@ -59,14 +60,10 @@ export interface ListingPreview {
 
   price?: number | null;
   isPriceNegotiable: boolean;
+  rentalPrice?: number | null;
 
   listingType?: "forSale" | "lease" | "forSaleLease" | null;
-  paymentFrequency?:
-    | "oneTime"
-    | "dollarPerSqPerYear"
-    | "monthly"
-    | "yearly"
-    | null;
+  paymentFrequency?: PaymentFrequency;
 
   updatedAt: string;
 

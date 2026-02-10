@@ -62,7 +62,7 @@ export const MarkerWithInfo = ({
             <InfoWindow
               anchor={marker}
               onClose={() => handlePinClicked(null)}
-              className=""
+              className="bg-white"
             >
               <div>
                 {href && image ? (
@@ -70,15 +70,17 @@ export const MarkerWithInfo = ({
                     <img
                       src={urlFor(image).url()}
                       alt={title}
-                      className="w-64 object-cover"
+                      className="w-96 aspect-video object-cover"
                     />
                   </a>
-                ) : (
+                ) : image !== undefined ? (
                   <img
                     src={urlFor(image).url()}
                     alt={title}
-                    className="w-64 object-cover"
+                    className="w-96 aspect-video object-cover"
                   />
+                ) : (
+                  <div></div>
                 )}
                 <h4 className="my-2">{title}</h4>
               </div>

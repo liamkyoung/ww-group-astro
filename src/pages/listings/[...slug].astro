@@ -1,10 +1,6 @@
 ---
-import type { Listing } from "@/globals/types/listing"; // adjust path to where you defined Listing
-import { sanityClient } from "@/lib/sanityClient";
-import {
-  LISTING_BY_SLUG_QUERY,
-  LISTING_SLUGS_QUERY,
-} from "@/lib/queries/listings";
+import type { Listing, ListingGalleryImage } from "@/globals/types/listing";
+import { getListingBySlug } from "@/lib/queries/listings";
 import ListingHero from "@/components/Hero/ListingHero.astro";
 import Default from "@/layouts/Default.astro";
 import PhotoGallery from "@/components/PhotoGallery.astro";
@@ -15,57 +11,29 @@ import CTA from "@/components/CTA.astro";
 import { toHTML } from "@portabletext/to-html";
 import ProjectBlock from "@/components/Blocks/ProjectBlock.astro";
 import { urlFor } from "@/lib/sanityImage";
+import ListingGalleryLightbox from "@/components/ListingGalleryLightbox";
 
 export const prerender = false;
 
-// Type of data returned by LISTING_SLUGS_QUERY
-type ListingSlugDoc = { slug: string };
+// `[...slug]` => slug can be string | string[] | undefined
+const rawSlug = Astro.params.slug;
 
-interface Props {
-  listing: Listing | null;
+// Decide how you want to interpret catch-all.
+// If your listing slugs are like /listings/my-listing, use:
+const slug = Array.isArray(rawSlug) ? rawSlug[rawSlug.length - 1] : rawSlug;
+
+if (!slug) {
+  throw new Error("Missing slug param");
 }
 
-export async function getStaticPaths() {
-  // 1) Fetch all slugs
-  const slugDocs =
-    await sanityClient.fetch<ListingSlugDoc[]>(LISTING_SLUGS_QUERY);
-
-  // 2) For each slug, fetch its full listing data
-  const paths = await Promise.all(
-    slugDocs.map(async ({ slug }) => {
-      const listing = await sanityClient.fetch<Listing | null>(
-        LISTING_BY_SLUG_QUERY,
-        { slug },
-      );
-
-      return {
-        params: { slug },
-        props: { listing },
-      };
-    }),
-  );
-
-  return paths;
-}
-
-const { listing } = Astro.props as Props;
+const listing = (await getListingBySlug(slug)) as Listing | null;
 
 if (!listing) {
-  throw new Error("Listing not found");
-} else if (!listing.location) {
-  throw new Error(`Listing not found ${listing.title}`);
+  throw new Error(`Listing not found for slug: ${slug}`);
 }
-
-const formattedPrice =
-  typeof listing.price === "number"
-    ? new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0,
-      }).format(listing.price)
-    : null;
-
-const htmlDesc = toHTML(listing.fullDescription);
+if (!listing.location) {
+  throw new Error(`Listing missing location: ${listing.title}`);
+}
 ---
 
 <Default title={listing.title} description={listing.overviewText}>
@@ -87,8 +55,9 @@ const htmlDesc = toHTML(listing.fullDescription);
       flyer={listing.listingFlyer}
       zillowLink={listing.zillowLink ?? ""}
       virtualTourLink={listing.virtualTourLink}
+      paymentFrequency={listing.paymentFrequency || null}
     />
-    <PhotoGallery imageGallery={listing.imageGallery ?? []} />
+    <ListingGalleryLightbox images={listing.imageGallery ?? []} client:load />
 
     <ProjectBlock
       title={listing.title}
@@ -98,11 +67,6 @@ const htmlDesc = toHTML(listing.fullDescription);
       colorScheme="red"
       description={listing.overviewText}
     />
-
-    <div class="space-y-8 mb-24">
-      <h2>Property Description</h2>
-      <div set:html={htmlDesc} />
-    </div>
 
     <Features
       bedrooms={listing.bedCount}

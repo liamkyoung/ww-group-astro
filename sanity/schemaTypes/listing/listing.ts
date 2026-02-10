@@ -71,6 +71,7 @@ export default defineType({
         {name: 'latitude', type: 'number'},
         {name: 'longitude', type: 'number'},
       ],
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'listingType',

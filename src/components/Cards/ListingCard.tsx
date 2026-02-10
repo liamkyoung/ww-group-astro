@@ -47,6 +47,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
     bathroomCount,
     coverImage,
     price,
+    rentalPrice,
     isPriceNegotiable,
     listingType,
     paymentFrequency,
@@ -68,10 +69,11 @@ export const ListingCard: React.FC<ListingCardProps> = ({
 
   const accentText = isPriceNegotiable
     ? "Negotiable"
-    : price != null
+    : price != null && price > 0
       ? formatDollarAmount(price.toString())
-      : undefined;
-
+      : rentalPrice
+        ? formatDollarAmount(rentalPrice.toString())
+        : undefined;
   const hasCoverImage = coverImage && typeof coverImage !== "string";
 
   return (
@@ -90,7 +92,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
               {listingType && (
                 <span className="text-wwBlack font-medium">
                   {" "}
-                  | {formatListingType(listingType)}
+                  {accentText && "|"} {formatListingType(listingType)}
                 </span>
               )}
             </div>

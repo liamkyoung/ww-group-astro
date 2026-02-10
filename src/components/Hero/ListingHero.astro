@@ -7,8 +7,7 @@ import {
 } from "@/lib/propertyTypeFormatter";
 import type { PropertyType } from "@/globals/viewmodels";
 import { ListingLinks } from "@/globals/navigation/listings/listings";
-import type { Flyer } from "@/globals/types/listing";
-import { urlFor } from "@/lib/sanityImage";
+import type { Flyer, PaymentFrequency } from "@/globals/types/listing";
 
 export interface Props {
   streetAddress: string;
@@ -25,7 +24,7 @@ export interface Props {
   flyer?: Flyer;
   zillowLink: string;
   virtualTourLink?: string;
-  paymentFrequency?: "oneTime" | "dollarPerSqPerYear" | "monthly" | "yearly";
+  paymentFrequency?: PaymentFrequency;
   listingType?: string;
 }
 
@@ -85,8 +84,27 @@ const {
           {sqFt} sq ft
         </span>
 
-        {sqFtLand && <span>{sqFtLand} land sq ft</span>}
-        {sqFtLot && <span>{sqFtLot} acre lot</span>}
+        {sqFtLand > 0 && <span>{sqFtLand} land sq ft</span>}
+        {
+          sqFtLot > 0 && (
+            <span class="inline-flex items-center gap-2">
+              {/* sq ft icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-6 text-wwBlack"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8.161 2.58a1.875 1.875 0 0 1 1.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0 1 21.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 0 1-1.676 0l-4.994-2.497a.375.375 0 0 0-.336 0l-3.868 1.935A1.875 1.875 0 0 1 2.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437ZM9 6a.75.75 0 0 1 .75.75V15a.75.75 0 0 1-1.5 0V6.75A.75.75 0 0 1 9 6Zm6.75 3a.75.75 0 0 0-1.5 0v8.25a.75.75 0 0 0 1.5 0V9Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              {sqFtLot} sq ft lot
+            </span>
+          )
+        }
 
         {
           propertyType && (
@@ -125,17 +143,25 @@ const {
 
   <div>
     <div class="space-y-4">
-      <h1 class="bg-wwRed p-6 text-white text-right">
-        {isPriceNegotiable ? "Negotiable" : formatDollarAmount(price)}
-      </h1>
+      {
+        isPriceNegotiable ? (
+          <h1 class="bg-wwRed p-6 text-white text-right">Negotiable</h1>
+        ) : (
+          price > 0 && (
+            <h1 class="bg-wwRed p-6 text-white text-right">
+              {formatDollarAmount(price)}
+            </h1>
+          )
+        )
+      }
 
       {
-        rentalPrice && rentalPrice > 0 && (
+        rentalPrice > 0 && (
           <div class="flex items-end bg-wwRed p-4 justify-end max-w-min whitespace-nowrap lg:ml-auto mx-auto lg:mr-0">
             <h3 class="text-white text-right">
               {formatDollarAmount(rentalPrice)}
             </h3>
-            <span class="text-white text-xl bg-wwRed font-medium">
+            <span class="text-white text-xl bg-wwRed font-medium ml-1">
               {formatPaymentFrequency(paymentFrequency as string)}
             </span>
           </div>
@@ -154,16 +180,11 @@ const {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                class="size-4"
+                class="size-4 text-wwBlack"
               >
                 <path
                   fill-rule="evenodd"
-                  d="M5.47 5.47a.75.75 0 0 1 1.06 0L18.53 17.47a.75.75 0 0 1-1.06 1.06L5.47 6.53a.75.75 0 0 1 0-1.06Z"
-                  clip-rule="evenodd"
-                />
-                <path
-                  fill-rule="evenodd"
-                  d="M9 4.5A.75.75 0 0 1 9.75 3.75H19.5a.75.75 0 0 1 .75.75V14.25a.75.75 0 0 1-1.5 0V6.31L6.53 18.78a.75.75 0 1 1-1.06-1.06L17.69 5.25H9.75A.75.75 0 0 1 9 4.5Z"
+                  d="M8.25 3.75H19.5a.75.75 0 0 1 .75.75v11.25a.75.75 0 0 1-1.5 0V6.31L5.03 20.03a.75.75 0 0 1-1.06-1.06L17.69 5.25H8.25a.75.75 0 0 1 0-1.5Z"
                   clip-rule="evenodd"
                 />
               </svg>

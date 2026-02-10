@@ -22,8 +22,8 @@ function convertListingsToPins(listings: ListingPreview[]): GoogleMapPin[] {
   return listings.map((l) => ({
     name: l.title,
     coords: {
-      lat: l.latitude || GoogleMapsDefaults.mapCenter.lat,
-      lng: l.longitude || GoogleMapsDefaults.mapCenter.lng,
+      lat: l.location?.latitude || GoogleMapsDefaults.mapCenter.lat,
+      lng: l.location?.longitude || GoogleMapsDefaults.mapCenter.lng,
     },
     slug: l.slug,
     coverImg: l.coverImage,

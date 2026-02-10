@@ -16,6 +16,7 @@ export const LISTING_PREVIEWS_QUERY = `
       bathroomCount,
       coverImage,
       price,
+      rentalPrice,
       isPriceNegotiable,
       listingType,
       paymentFrequency,

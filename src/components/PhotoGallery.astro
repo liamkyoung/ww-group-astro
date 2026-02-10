@@ -1,139 +1,182 @@
 ---
-import type { ListingGalleryImage } from "@/globals/types/listing"; // adjust path
+import type { ListingGalleryImage } from "@/globals/types/listing";
 import { urlFor } from "@/lib/sanityImage";
+
 export interface Props {
   imageGallery: ListingGalleryImage[];
 }
 
 const { imageGallery } = Astro.props as Props;
 
-const hasImages = imageGallery && imageGallery.length > 0;
+const hasImages = Array.isArray(imageGallery) && imageGallery.length > 0;
 
-// Helper functions for Sanity images
-const getImageUrl = (img: ListingGalleryImage) => img?.image?.asset?.url ?? "";
+// Sanity helpers
+const getImageUrl = (img: ListingGalleryImage) => {
+  // Prefer urlFor (handles crops/hotspots), fallback to asset url if it exists
+  try {
+    return img?.image ? urlFor(img.image).url() : "";
+  } catch {
+    return img?.image?.asset?.url ?? "";
+  }
+};
 
 const getAlt = (img: ListingGalleryImage, fallbackIndex: number) =>
-  (img?.image as any)?.alt ||
-  img?.caption ||
-  `Listing image ${fallbackIndex + 1}`;
+  (img?.image as any)?.alt || img?.caption || `Listing image ${fallbackIndex + 1}`;
 
-// Unique ID to scope the lightbox JS to this instance
+// Scope JS to this instance
 const galleryId = `gallery-${Math.random().toString(36).slice(2, 8)}`;
+
+// For the top layout (1 hero + up to 2 side thumbs)
+const hero = hasImages ? imageGallery[0] : null;
+const sideThumbs = hasImages ? imageGallery.slice(1, 3) : [];
 ---
 
-{
-  hasImages && (
-    <div id={galleryId} class="w-full">
-      <div class="flex gap-4 mt-8">
-        {/* Main image */}
-        <div class="lg:w-3/4 w-full">
-          {imageGallery.map(
-            (img, index) =>
-              index === 0 && (
-                <div>
-                  <img
-                    src={urlFor(img?.image).url()}
-                    alt={getAlt(img, index)}
-                    class="w-full h-auto object-cover rounded-md"
-                    loading="eager"
-                  />
-                </div>
-              ),
-          )}
-        </div>
-
-        {/* Side thumbnails (only on lg screens) */}
-        <div class="hidden w-1/4 lg:flex flex-col gap-8">
-          {imageGallery.map(
-            (img, index) =>
-              index !== 0 &&
-              index < 3 && (
-                <div>
-                  <img
-                    src={urlFor(img?.image).url()}
-                    alt={getAlt(img, index)}
-                    class="w-full h-auto object-cover rounded-md"
-                    loading="lazy"
-                  />
-                </div>
-              ),
-          )}
-        </div>
+{hasImages && (
+  <section id={galleryId} class="w-full" data-gallery-root>
+    {/* Top layout: hero + side thumbs (lg+) */}
+    <div class="flex gap-4 mt-8">
+      <div class="lg:w-3/4 w-full">
+        {hero && (
+          <button
+            type="button"
+            class="block w-full"
+            data-thumb
+            data-index="0"
+            aria-label="Open image 1"
+          >
+            <img
+              src={getImageUrl(hero)}
+              alt={getAlt(hero, 0)}
+              class="w-full h-auto object-cover rounded-md"
+              loading="eager"
+            />
+          </button>
+        )}
       </div>
 
-      {/* Open lightbox button */}
-      <div class="flex justify-center mt-4">
-        <button type="button" class="btn-primary" data-lightbox-open>
-          SEE FULL GALLERY
-        </button>
+      <div class="hidden w-1/4 lg:flex flex-col gap-4">
+        {sideThumbs.map((img, idx) => {
+          const index = idx + 1;
+          return (
+            <button
+              type="button"
+              class="block w-full"
+              data-thumb
+              data-index={index}
+              aria-label={`Open image ${index + 1}`}
+            >
+              <img
+                src={getImageUrl(img)}
+                alt={getAlt(img, index)}
+                class="w-full h-auto object-cover rounded-md"
+                loading="lazy"
+              />
+            </button>
+          );
+        })}
       </div>
+    </div>
 
-      {/* Lightbox overlay */}
-      <div
-        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80"
-        data-lightbox-overlay
+    {/* Optional grid of more thumbnails under the hero */}
+    {imageGallery.length > 3 && (
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-6">
+        {imageGallery.slice(3).map((img, i) => {
+          const index = i + 3;
+          return (
+            <button
+              type="button"
+              class="block w-full"
+              data-thumb
+              data-index={index}
+              aria-label={`Open image ${index + 1}`}
+            >
+              <img
+                src={getImageUrl(img)}
+                alt={getAlt(img, index)}
+                class="w-full h-40 object-cover rounded-md"
+                loading="lazy"
+              />
+            </button>
+          );
+        })}
+      </div>
+    )}
+
+    {/* Open gallery button */}
+    <div class="flex justify-center mt-6">
+      <button type="button" class="btn-primary" data-lightbox-open>
+        SEE FULL GALLERY
+      </button>
+    </div>
+
+    {/* Lightbox */}
+    <div
+      class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80"
+      data-lightbox-overlay
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image gallery"
+    >
+      {/* Close */}
+      <button
+        type="button"
+        class="absolute top-4 right-4 text-white text-3xl leading-none"
+        aria-label="Close gallery"
+        data-lightbox-close
       >
-        <button
-          type="button"
-          class="absolute top-4 right-4 text-white text-2xl"
-          aria-label="Close gallery"
-          data-lightbox-close
-        >
-          ×
-        </button>
+        ×
+      </button>
 
-        {/* Prev / Next controls */}
-        <button
-          type="button"
-          class="absolute left-4 text-white text-3xl px-3 py-2 bg-black/40 rounded-full"
-          aria-label="Previous image"
-          data-lightbox-prev
-        >
-          ‹
-        </button>
+      {/* Prev */}
+      <button
+        type="button"
+        class="absolute left-4 text-white text-3xl px-3 py-2 bg-black/40 rounded-full"
+        aria-label="Previous image"
+        data-lightbox-prev
+      >
+        ‹
+      </button>
 
-        <button
-          type="button"
-          class="absolute right-4 text-white text-3xl px-3 py-2 bg-black/40 rounded-full"
-          aria-label="Next image"
-          data-lightbox-next
-        >
-          ›
-        </button>
+      {/* Next */}
+      <button
+        type="button"
+        class="absolute right-4 text-white text-3xl px-3 py-2 bg-black/40 rounded-full"
+        aria-label="Next image"
+        data-lightbox-next
+      >
+        ›
+      </button>
 
-        {/* Slide container */}
-        <div class="max-w-5xl w-full px-4">
-          <div class="relative w-full">
-            {imageGallery.map((img, index) => (
-              <figure
-                key={index}
-                class={`w-full ${index === 0 ? "block" : "hidden"}`}
-                data-lightbox-slide
-                data-index={index}
-              >
-                <img
-                  src={getImageUrl(img)}
-                  alt={getAlt(img, index)}
-                  class="w-full h-auto object-contain max-h-[80vh] rounded-md"
-                  loading="lazy"
-                />
-                {img.caption && (
-                  <figcaption class="mt-2 text-center text-sm text-gray-200">
-                    {img.caption}
-                  </figcaption>
-                )}
-              </figure>
-            ))}
-          </div>
+      {/* Slide area */}
+      <div class="max-w-6xl w-full px-4">
+        <div class="relative w-full">
+          {imageGallery.map((img, index) => (
+            <figure
+              class={`w-full ${index === 0 ? "block" : "hidden"}`}
+              data-lightbox-slide
+              data-index={index}
+            >
+              <img
+                src={getImageUrl(img)}
+                alt={getAlt(img, index)}
+                class="w-full h-auto object-contain max-h-[80vh] rounded-md"
+                loading="lazy"
+              />
+              {(img.caption || img?.image?.caption) && (
+                <figcaption class="mt-3 text-center text-sm text-gray-200">
+                  {img.caption ?? (img?.image as any)?.caption}
+                </figcaption>
+              )}
+            </figure>
+          ))}
         </div>
       </div>
     </div>
-  )
-}
-
+  </section>
+)}
 <script is:inline>
   (() => {
-    const root = document.getElementById("{galleryId}");
+    const root = document.currentScript?.closest?.("[data-gallery-root]");
     if (!root) return;
 
     const overlay = root.querySelector("[data-lightbox-overlay]");
@@ -141,61 +184,68 @@ const galleryId = `gallery-${Math.random().toString(36).slice(2, 8)}`;
     const closeBtn = root.querySelector("[data-lightbox-close]");
     const prevBtn = root.querySelector("[data-lightbox-prev]");
     const nextBtn = root.querySelector("[data-lightbox-next]");
-    const slides = Array.from(
-      root.querySelectorAll("[data-lightbox-slide]"),
-    ) as HTMLElement[];
+    const slides = Array.from(root.querySelectorAll("[data-lightbox-slide]"));
+    const thumbs = Array.from(root.querySelectorAll("[data-thumb]"));
 
     if (!overlay || !openBtn || !closeBtn || slides.length === 0) return;
 
     let currentIndex = 0;
+    let lastFocused = null;
 
-    const showSlide = (index: number) => {
-      if (index < 0) index = slides.length - 1;
-      if (index >= slides.length) index = 0;
+    const isOpen = () => !overlay.classList.contains("hidden");
+
+    const showSlide = (index) => {
+      const total = slides.length;
+      if (index < 0) index = total - 1;
+      if (index >= total) index = 0;
       currentIndex = index;
 
       slides.forEach((slide, i) => {
-        if (i === currentIndex) {
-          slide.classList.remove("hidden");
-          slide.classList.add("block");
-        } else {
-          slide.classList.remove("block");
-          slide.classList.add("hidden");
-        }
+        slide.classList.toggle("hidden", i !== currentIndex);
+        slide.classList.toggle("block", i === currentIndex);
       });
     };
 
-    const openLightbox = () => {
+    const openLightbox = (startIndex = 0) => {
+      lastFocused = document.activeElement;
       overlay.classList.remove("hidden");
       overlay.classList.add("flex");
-      showSlide(currentIndex);
       document.body.style.overflow = "hidden";
+      showSlide(startIndex);
+      closeBtn.focus?.();
     };
 
     const closeLightbox = () => {
       overlay.classList.remove("flex");
       overlay.classList.add("hidden");
       document.body.style.overflow = "";
+      lastFocused?.focus?.();
     };
 
-    openBtn.addEventListener("click", openLightbox);
-    closeBtn.addEventListener("click", closeLightbox);
+    // Button open
+    openBtn.addEventListener("click", () => openLightbox(currentIndex));
 
+    // Thumbnail open (IMPORTANT: add data-thumb/data-index to images you want clickable)
+    thumbs.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = Number(btn.getAttribute("data-index") || "0");
+        openLightbox(Number.isFinite(idx) ? idx : 0);
+      });
+    });
+
+    closeBtn.addEventListener("click", closeLightbox);
     prevBtn?.addEventListener("click", () => showSlide(currentIndex - 1));
     nextBtn?.addEventListener("click", () => showSlide(currentIndex + 1));
 
-    // Close on overlay click (but not when clicking image / controls)
     overlay.addEventListener("click", (event) => {
-      if (event.target === overlay) {
-        closeLightbox();
-      }
+      if (event.target === overlay) closeLightbox();
     });
 
-    // Escape key closes lightbox
     window.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !overlay.classList.contains("hidden")) {
-        closeLightbox();
-      }
+      if (!isOpen()) return;
+      if (event.key === "Escape") closeLightbox();
+      if (event.key === "ArrowLeft") showSlide(currentIndex - 1);
+      if (event.key === "ArrowRight") showSlide(currentIndex + 1);
     });
   })();
 </script>

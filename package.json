@@ -42,6 +42,7 @@
     "sharp": "^0.34.3",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17",
+    "yet-another-react-lightbox": "^3.28.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {

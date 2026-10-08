@@ -74,6 +74,10 @@ const hasFacts = facts && facts.length > 0;
 const hasLinks = links && links.length > 0;
 const showLocationIcon = subheading && subheadingType === "location";
 const showTextSubheading = subheading && subheadingType === "text";
+const paragraphs = (description ?? "")
+  .split(/\n\s*\n/)
+  .map((p) => p.trim())
+  .filter(Boolean);
 ---
 
 <div id={id} class={`grid lg:grid-cols-2 ${bgColorClass} overflow-x-hidden`}>
@@ -142,14 +146,14 @@ const showTextSubheading = subheading && subheadingType === "text";
       )
     }
 
-    <!-- Main description -->
-    <p
-      class={`pt-8 md:pt-4 ${
+    <!-- Main description: blank lines start a new paragraph, single line breaks are kept -->
+    <div
+      class={`pt-8 md:pt-4 space-y-4 ${
         hasFacts ? "mb-10 2xl:mt-8" : ""
       } ${textColorClass} text-left`}
     >
-      {description}
-    </p>
+      {paragraphs.map((p) => <p class="whitespace-pre-line">{p}</p>)}
+    </div>
 
     <!-- Facts (mobile / tablet) -->
     {

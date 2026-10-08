@@ -38,6 +38,15 @@ export interface Location {
   longitude: number;
 }
 
+export interface AddressOverride {
+  streetAddress?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  latitude?: number;
+  longitude?: number;
+}
+
 export interface ListingPreview {
   _id: string;
   slug: string;
@@ -45,6 +54,8 @@ export interface ListingPreview {
 
   // nested location object
   location: LocationPreview;
+  overrideAddress?: boolean;
+  addressOverride?: AddressOverride | null;
 
   address?: string;
   latitude?: number | null;
@@ -77,6 +88,9 @@ export interface Listing {
   slug: string;
   title: string;
   location: Location;
+  overrideAddress?: boolean;
+  addressOverride?: AddressOverride | null;
+  address?: string;
   listingType?: ListingType;
   isPriceNegotiable: boolean;
   price?: number | null;
@@ -142,6 +156,8 @@ export enum SortListingsEnum {
 
 export interface LocationPreview {
   address: string;
+  streetAddress?: string | null;
+  zipCode?: string | null;
   latitude?: number | null;
   longitude?: number | null;
   city?: string | null;

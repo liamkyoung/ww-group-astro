@@ -9,6 +9,8 @@ export const LISTING_PREVIEWS_QUERY = `
       "slug": slug.current,
       title,
       location,
+      overrideAddress,
+      addressOverride,
       sqFt,
       sqFtLand,
       sqFtLot,
@@ -47,6 +49,8 @@ export const LISTING_BY_SLUG_QUERY = `
     "slug": slug.current,
     title,
     location,
+    overrideAddress,
+    addressOverride,
     listingType,
     isPriceNegotiable,
     price,
@@ -74,9 +78,10 @@ export const LISTING_BY_SLUG_QUERY = `
     virtualTourLink,
     coverImage,
 
-    // Normalize imageGallery items to { image, caption }
+    // Normalize imageGallery items to { image, caption }.
+    // Legacy items wrap the image in a "galleryImage" object; newer items are the image itself.
     "imageGallery": imageGallery[]{
-      "image": image,
+      "image": select(_type == "galleryImage" => image, { asset, crop, hotspot }),
       caption
     },
 
@@ -131,6 +136,8 @@ export const LISTING_PREVIEWS_BY_AGENT_SLUG_QUERY = `
     "slug": slug.current,
     title,
     location,
+    overrideAddress,
+    addressOverride,
     sqFt,
     sqFtLand,
     sqFtLot,
@@ -147,13 +154,51 @@ export const LISTING_PREVIEWS_BY_AGENT_SLUG_QUERY = `
 `;
 
 /**
+ * When "Override Displayed Address" is checked in the studio, any filled-in
+ * override fields replace the searched (Google) values. Also exposes the full
+ * address at the top level for listing cards and map pins.
+ */
+function applyAddressOverride<T extends Listing | ListingPreview>(
+  listing: T,
+): T {
+  const override = listing.overrideAddress ? listing.addressOverride : null;
+  if (!override) {
+    return { ...listing, address: listing.location?.address };
+  }
+
+  const filled = Object.fromEntries(
+    Object.entries(override).filter(
+      ([, v]) => v !== null && v !== undefined && v !== "",
+    ),
+  );
+  const location = { ...listing.location, ...filled } as T["location"];
+  const address = [
+    location.streetAddress,
+    [
+      location.city,
+      [location.state, location.zipCode].filter(Boolean).join(" "),
+    ]
+      .filter(Boolean)
+      .join(", "),
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  return {
+    ...listing,
+    location: { ...location, address },
+    address,
+  };
+}
+
+/**
  * Fetch all listings as ListingPreview[]
  */
 export async function getAllListingPreviews(): Promise<ListingPreview[]> {
   const data = await sanityClient.fetch<ListingPreview[]>(
     LISTING_PREVIEWS_QUERY,
   );
-  return data ?? [];
+  return (data ?? []).map(applyAddressOverride);
 }
 
 /**
@@ -165,15 +210,16 @@ export async function getListingBySlug(slug: string): Promise<Listing | null> {
     LISTING_BY_SLUG_QUERY,
     { slug },
   );
-  return listing ?? null;
+  return listing ? applyAddressOverride(listing) : null;
 }
 
 export async function getListingPreviewsByAgentSlug(
   agentSlug: string,
 ): Promise<ListingPreview[]> {
-  const res = sanityClient.fetch(LISTING_PREVIEWS_BY_AGENT_SLUG_QUERY, {
-    agentSlug,
-  });
+  const res = await sanityClient.fetch<ListingPreview[]>(
+    LISTING_PREVIEWS_BY_AGENT_SLUG_QUERY,
+    { agentSlug },
+  );
 
-  return res;
+  return (res ?? []).map(applyAddressOverride);
 }

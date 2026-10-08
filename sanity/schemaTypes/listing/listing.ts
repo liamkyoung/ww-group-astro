@@ -6,7 +6,6 @@ import {
   propertyTypes,
   tenancyType,
   utilitySelect,
-  zoningType,
 } from './types'
 
 import {AddressInput} from '../../components/AddressInput'
@@ -71,7 +70,42 @@ export default defineType({
         {name: 'latitude', type: 'number'},
         {name: 'longitude', type: 'number'},
       ],
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.custom((value, {document}) =>
+          value || document?.overrideAddress ? true : 'Search for an address or use an override',
+        ),
+    }),
+    defineField({
+      name: 'overrideAddress',
+      title: 'Override Displayed Address',
+      description:
+        'Check this if the searched address is wrong or incomplete. Any override fields you fill in replace the searched values on the website; blank fields fall back to the searched address.',
+      type: 'boolean',
+      fieldset: 'overview',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'addressOverride',
+      title: 'Address Override',
+      type: 'object',
+      fieldset: 'overview',
+      hidden: ({document}) => document?.overrideAddress !== true,
+      fields: [
+        {name: 'streetAddress', title: 'Street', type: 'string'},
+        {name: 'city', type: 'string'},
+        {name: 'state', type: 'string'},
+        {name: 'zipCode', title: 'Zip Code', type: 'string'},
+        {
+          name: 'latitude',
+          type: 'number',
+          description: 'Optional. Leave blank to keep the map pin from the searched address.',
+        },
+        {
+          name: 'longitude',
+          type: 'number',
+          description: 'Optional. Leave blank to keep the map pin from the searched address.',
+        },
+      ],
     }),
     defineField({
       name: 'listingType',
@@ -140,7 +174,7 @@ export default defineType({
     }),
     defineField({
       name: 'zillowLink',
-      title: 'Zillow Link',
+      title: 'Full Listing Link (e.g. Zillow)',
       type: 'url',
       fieldset: 'overview',
       validation: (Rule) => Rule.uri({allowRelative: false, scheme: ['http', 'https']}),
@@ -170,18 +204,17 @@ export default defineType({
       name: 'imageGallery',
       title: 'Additional Images',
       type: 'array',
+      description: 'Drag and drop multiple images here to upload them all at once.',
       fieldset: 'images',
+      // Plain image members (not wrapped in an object) so the array accepts multi-file drops
       of: [
-        defineField({
-          name: 'galleryImage',
-          title: 'Image',
-          type: 'object',
-          fields: [
-            {name: 'image', title: 'Image', type: 'image', options: {hotspot: true}},
-            {name: 'caption', title: 'Caption', type: 'string'},
-          ],
-        }),
+        {
+          type: 'image',
+          options: {hotspot: true},
+          fields: [{name: 'caption', title: 'Caption', type: 'string'}],
+        },
       ],
+      options: {layout: 'grid'},
     }),
 
     //
@@ -256,9 +289,6 @@ export default defineType({
       title: 'Zone',
       type: 'string',
       fieldset: 'features',
-      options: {
-        list: zoningType,
-      },
     }),
     defineField({
       name: 'buildingClass',

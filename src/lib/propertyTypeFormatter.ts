@@ -82,9 +82,11 @@ export function formatPropertyType(propType: string): string {
   return 'N/A'
 }
 
+// Zoning is free text in Sanity; older listings may still hold the legacy
+// dropdown codes until the zoning-to-text migration has run.
 export function formatZoningType(zType: string): string {
   if (!zType) return ''
-  switch (zType[0]) {
+  switch (zType) {
     case 'C':
       return 'Commercial'
     case 'r':
@@ -92,10 +94,8 @@ export function formatZoningType(zType: string): string {
     case 'i':
       return 'Industrial'
     default:
-      return 'N/A'
+      return zType
   }
-
-  return 'N/A'
 }
 
 export function formatListingType(listingType: string): string {

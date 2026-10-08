@@ -80,7 +80,7 @@ const paragraphs = (description ?? "")
   .filter(Boolean);
 ---
 
-<div id={id} class={`grid lg:grid-cols-2 ${bgColorClass} overflow-x-hidden`}>
+<div id={id} class={`grid xl:grid-cols-2 ${bgColorClass} overflow-x-hidden`}>
   <!-- IMAGE LEFT ON DESKTOP -->
   {
     imagePosition === "left" && (
@@ -88,7 +88,7 @@ const paragraphs = (description ?? "")
         <img
           src={imageSrc}
           alt={imageAlt}
-          class="sm:w-full max-h-96 lg:max-h-none lg:h-full object-cover"
+          class="sm:w-full max-h-96 xl:max-h-none xl:h-full object-cover"
           loading="lazy"
         />
       </div>
@@ -98,8 +98,8 @@ const paragraphs = (description ?? "")
   <!-- TEXT COLUMN -->
   <div
     class={imagePosition === "left"
-      ? "p-8 ml-8 lg:mr-8 my-auto relative 2xl:ml-32 2xl:mr-16"
-      : "p-8 ml-8 2xl:ml-16 2xl:mr-32 my-auto relative"}
+      ? "p-8 sm:ml-8 xl:mr-8 my-auto relative 2xl:ml-16 2xl:mr-16"
+      : "p-8 sm:ml-8 2xl:ml-16 2xl:mr-16 my-auto relative"}
   >
     <div class="relative md:py-10 lg:pt-8 lg:pb-4">
       <h2 class={`${textColorClass} text-left text-4xl lg:text-5xl`}>
@@ -150,9 +150,13 @@ const paragraphs = (description ?? "")
     <div
       class={`pt-8 md:pt-4 space-y-4 ${
         hasFacts ? "mb-10 2xl:mt-8" : ""
-      } ${textColorClass} text-left`}
+      } text-left`}
     >
-      {paragraphs.map((p) => <p class="whitespace-pre-line">{p}</p>)}
+      {
+        paragraphs.map((p) => (
+          <p class={`whitespace-pre-line ${textColorClass}`}>{p}</p>
+        ))
+      }
     </div>
 
     <!-- Facts (mobile / tablet) -->
@@ -200,7 +204,7 @@ const paragraphs = (description ?? "")
         <img
           src={imageSrc}
           alt={imageAlt}
-          class="sm:w-full max-h-96 lg:max-h-none lg:h-full object-cover"
+          class="sm:w-full max-h-96 xl:max-h-none xl:h-full object-cover"
           loading="lazy"
         />
       </div>
